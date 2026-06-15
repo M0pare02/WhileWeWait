@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>While We Wait</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<!-- ==============================
+     HOME SCREEN
+================================ -->
+<div id="screen-home" class="screen active">
+  <div class="home-hero">
+    <div class="floating-bubbles">
+      <div class="bubble"></div>
+      <div class="bubble"></div>
+      <div class="bubble"></div>
+      <div class="bubble"></div>
+      <div class="bubble"></div>
+    </div>
+    <div class="hero-theme-btn" id="hero-theme-btn" onclick="setTheme(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark')">☀️</div>
+    <div class="home-label">✦ Your next 5 minutes</div>
+    <h1 class="home-title">While We<br><span>Wait</span></h1>
+    <p class="home-subtitle">Skip the scroll. Play together while you wait.</p>
+  </div>
+
+  <div class="scroll-content">
+    <div class="section-label">Continue</div>
+    <div class="continue-card" onclick="showSetup()">
+      <div class="continue-icon">⬛</div>
+      <div class="continue-info">
+        <div class="continue-tag">Grid Grab</div>
+        <div class="continue-name">Game in progress</div>
+        <div class="continue-meta">Alex vs Jordan · Standard board · 24 squares left</div>
+      </div>
+      <div class="continue-arrow">›</div>
+    </div>
+
+    <div class="section-label">Quick Start</div>
+    <div class="quick-grid">
+      <div class="quick-card" onclick="showSetup()">
+        <span class="quick-emoji">⬛</span>
+        <div class="quick-name">Grid Grab</div>
+        <div class="quick-desc">Claim squares, outplay your rivals</div>
+      </div>
+      <div class="quick-card" onclick="showWYR()">
+        <span class="quick-emoji">🤔</span>
+        <div class="quick-name">Would You Rather</div>
+        <div class="quick-desc">Spark debates, reveal personalities</div>
+      </div>
+      <div class="quick-card" onclick="showSpeed()">
+        <span class="quick-emoji">⚡</span>
+        <div class="quick-name">Speed Categories</div>
+        <div class="quick-desc">Name 5 things before time runs out</div>
+      </div>
+      <div class="quick-card" style="opacity:0.6; cursor:default;">
+        <span class="quick-emoji">🎭</span>
+        <div class="quick-name">Trivia Blitz</div>
+        <div class="quick-desc" style="color: var(--violet-light); font-weight: 700;">Coming soon</div>
+      </div>
+    </div>
+
+    <div class="section-label">Featured Game</div>
+    <div class="feature-card" onclick="showSetup()">
+      <div class="feature-header">
+        <div>
+          <div class="feature-badge">⭐ Most Played</div>
+        </div>
+      </div>
+      <div class="feature-title">Grid Grab</div>
+      <div class="feature-desc">Draw lines, complete squares, steal the board. Works for 2–4 players on one phone.</div>
+      <div class="feature-preview">
+        <div class="mini-grid">
+          <div class="mini-cell coral"></div>
+          <div class="mini-cell coral"></div>
+          <div class="mini-cell"></div>
+          <div class="mini-cell sky"></div>
+          <div class="mini-cell sky"></div>
+          <div class="mini-cell coral"></div>
+          <div class="mini-cell"></div>
+          <div class="mini-cell"></div>
+          <div class="mini-cell sky"></div>
+          <div class="mini-cell sky"></div>
+          <div class="mini-cell"></div>
+          <div class="mini-cell mint"></div>
+          <div class="mini-cell mint"></div>
+          <div class="mini-cell"></div>
+          <div class="mini-cell yellow"></div>
+          <div class="mini-cell"></div>
+          <div class="mini-cell"></div>
+          <div class="mini-cell yellow"></div>
+          <div class="mini-cell yellow"></div>
+          <div class="mini-cell"></div>
+        </div>
+      </div>
+      <div class="feature-footer">
+        <div class="player-dots">
+          <div class="pdot coral"></div>
+          <div class="pdot sky"></div>
+          <div class="pdot yellow"></div>
+          <div class="pdot mint"></div>
+          <span style="font-size:12px; color: var(--text-muted); font-family: 'Inter'; margin-left: 4px;">2–4 players</span>
+        </div>
+        <button class="play-btn">Play Now</button>
+      </div>
+    </div>
+
+    <div class="section-label">Your Stats</div>
+    <div class="stats-strip">
+      <div class="stat-pill">
+        <div class="stat-value">14</div>
+        <div class="stat-label">Games Played</div>
+      </div>
+      <div class="stat-pill">
+        <div class="stat-value">9</div>
+        <div class="stat-label">Wins</div>
+      </div>
+      <div class="stat-pill">
+        <div class="stat-value">64%</div>
+        <div class="stat-label">Win Rate</div>
+      </div>
+    </div>
+
+    <div class="section-label">Achievements</div>
+    <div class="achievement-row">
+      <div class="achievement">
+        <div class="ach-icon">🏆</div>
+        <div>
+          <div class="ach-name">First Victory</div>
+          <div class="ach-desc">Win your first game</div>
+        </div>
+      </div>
+      <div class="achievement">
+        <div class="ach-icon">🏗️</div>
+        <div>
+          <div class="ach-name">Architect</div>
+          <div class="ach-desc">Play 100 games</div>
+        </div>
+      </div>
+      <div class="achievement locked">
+        <div class="ach-icon">😤</div>
+        <div>
+          <div class="ach-name">Greedy</div>
+          <div class="ach-desc">Capture 3+ squares in a turn</div>
+        </div>
+      </div>
+      <div class="achievement locked">
+        <div class="ach-icon">⚔️</div>
+        <div>
+          <div class="ach-name">Rival Crusher</div>
+          <div class="ach-desc">Beat same player 5 times</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <nav class="bottom-nav">
+    <div class="nav-item active" onclick="showHome()">
+      <div class="nav-icon">🏠</div>
+      <div class="nav-label">Home</div>
+    </div>
+    <div class="nav-item" onclick="showSetup()">
+      <div class="nav-icon">🎮</div>
+      <div class="nav-label">Play</div>
+    </div>
+    <div class="nav-item" onclick="showProfile()">
+      <div class="nav-icon">👤</div>
+      <div class="nav-label">Profile</div>
+    </div>
+  </nav>
+</div>
+
+
+<!-- ==============================
+     GAME SETUP SCREEN
+================================ -->
+<div id="screen-setup" class="screen">
+  <div class="setup-header">
+    <div class="setup-back" onclick="showHome()">←</div>
+    <h2 class="setup-title">Grid Grab</h2>
+    <p class="setup-subtitle">Set up your game — takes 10 seconds</p>
+  </div>
+
+  <div class="scroll-content setup-body">
+    <div class="setup-section">
+      <div class="setup-section-title">Board Size</div>
+      <div class="size-options">
+        <div class="size-option" onclick="selectSize(this, 'quick')" data-size="quick">
+          <div class="size-left">
+            <span class="size-emoji">⚡</span>
+            <div>
+              <div class="size-name">Quick</div>
+              <div class="size-dims">4 × 6 grid · 15 squares</div>
+            </div>
+          </div>
+          <div class="size-time">~3 min</div>
+        </div>
+        <div class="size-option selected" onclick="selectSize(this, 'standard')" data-size="standard">
+          <div class="size-left">
+            <span class="size-emoji">🎯</span>
+            <div>
+              <div class="size-name">Standard</div>
+              <div class="size-dims">8 × 12 grid · 77 squares</div>
+            </div>
+          </div>
+          <div class="size-time">~10 min</div>
+        </div>
+        <div class="size-option" onclick="selectSize(this, 'long')" data-size="long">
+          <div class="size-left">
+            <span class="size-emoji">✈️</span>
+            <div>
+              <div class="size-name">Long Wait</div>
+              <div class="size-dims">12 × 16 grid · 165 squares</div>
+            </div>
+          </div>
+          <div class="size-time">~20 min</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="setup-section">
+      <div class="setup-section-title">Players</div>
+      <div class="player-list" id="player-list">
+        <div class="player-entry">
+          <div class="player-row" data-color="#FF6B6B">
+            <div class="player-color-dot" style="background:#FF6B6B;" onclick="toggleColorPicker(this)">
+              <div class="dot-badge">✎</div>
+            </div>
+            <input class="player-name-input" type="text" placeholder="Player 1 name" value="Alex">
+            <div class="remove-player" onclick="removePlayer(this)">−</div>
+          </div>
+        </div>
+        <div class="player-entry">
+          <div class="player-row" data-color="#4FC3F7">
+            <div class="player-color-dot" style="background:#4FC3F7;" onclick="toggleColorPicker(this)">
+              <div class="dot-badge">✎</div>
+            </div>
+            <input class="player-name-input" type="text" placeholder="Player 2 name" value="Jordan">
+            <div class="remove-player" onclick="removePlayer(this)">−</div>
+          </div>
+        </div>
+      </div>
+      <div style="height:10px;"></div>
+      <div class="add-player-btn" onclick="addPlayer()">＋ Add another player</div>
+    </div>
+  </div>
+
+  <button class="start-game-btn" onclick="startGame()">Start Game →</button>
+</div>
+
+
+<!-- ==============================
+     GAME SCREEN (Grid Grab)
+================================ -->
+<div id="screen-game" class="screen">
+  <div class="game-header">
+    <div class="game-back" onclick="showHome()">← Home</div>
+    <div class="game-title-row">
+      <div class="game-title">Grid Grab</div>
+      <div class="game-size-badge" id="game-size-label">Standard</div>
+    </div>
+    <div class="score-bar" id="score-bar"></div>
+  </div>
+
+  <div class="turn-banner">
+    <div class="turn-dot" id="turn-dot"></div>
+    <div class="turn-text"><span class="turn-name" id="turn-name">Alex's</span> turn — draw a line</div>
+  </div>
+
+  <div class="board-area">
+    <div id="dots-board">
+      <svg id="game-svg"></svg>
+    </div>
+  </div>
+</div>
+
+
+<!-- ==============================
+     VICTORY SCREEN
+================================ -->
+<div id="screen-victory" class="screen">
+  <div class="victory-emoji">🏆</div>
+  <div class="victory-label">Winner!</div>
+  <div class="victory-winner"><span id="winner-name">Alex</span> wins!</div>
+  <div class="victory-sub" id="victory-sub">Captured the most squares</div>
+
+  <div class="victory-scores" id="victory-scores"></div>
+
+  <div class="victory-actions">
+    <button class="victory-btn-primary" onclick="showSetup()">Play Again</button>
+    <button class="victory-btn-secondary" onclick="showHome()">Back to Home</button>
+  </div>
+</div>
+
+
+<!-- ==============================
+     WOULD YOU RATHER
+================================ -->
+<div id="screen-wyr" class="screen">
+  <div class="wyr-header">
+    <div class="wyr-back" onclick="showHome()">←</div>
+    <div class="wyr-title">Would You Rather</div>
+  </div>
+
+  <div class="wyr-card-area">
+    <div class="wyr-count" id="wyr-count">Question 1 of 20</div>
+    <div class="wyr-card">
+      <div class="wyr-card-label">🤔 Would you rather</div>
+      <div class="wyr-question" id="wyr-a">Have the ability to fly but only at walking speed</div>
+      <div class="wyr-or">
+        <div class="wyr-or-line"></div>
+        <div class="wyr-or-badge">OR</div>
+        <div class="wyr-or-line"></div>
+      </div>
+      <div class="wyr-option-b" id="wyr-b">Be able to read minds but you can never turn it off</div>
+    </div>
+    <div class="wyr-nav">
+      <button class="wyr-btn wyr-btn-prev" onclick="wyrPrev()">← Prev</button>
+      <button class="wyr-btn wyr-btn-next" onclick="wyrNext()">Next →</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ==============================
+     SPEED CATEGORIES
+================================ -->
+<div id="screen-speed" class="screen">
+  <div class="speed-header">
+    <div class="speed-back" onclick="showHome()">←</div>
+    <div class="speed-title">Speed Categories</div>
+  </div>
+
+  <div class="speed-body">
+    <div class="speed-score-track">
+      <div class="speed-round-info">Round <span id="speed-round">1</span></div>
+      <div class="speed-score-display">Score: <span id="speed-score">0</span></div>
+    </div>
+
+    <div class="speed-category-display">
+      <div class="speed-cat-label" id="speed-status">Ready to play!</div>
+      <div class="speed-cat-text" id="speed-category">Name 5 things in the category shown — then pass the phone!</div>
+      <div class="speed-timer hidden" id="speed-timer">30</div>
+    </div>
+
+    <div class="speed-actions" id="speed-actions-start">
+      <button class="speed-btn speed-btn-start" onclick="speedStart()">Start Round ⚡</button>
+    </div>
+    <div class="speed-actions hidden" id="speed-actions-play">
+      <button class="speed-btn speed-btn-skip" onclick="speedSkip()">Skip</button>
+      <button class="speed-btn speed-btn-got" onclick="speedGot()">✓ Got it!</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ==============================
+     PROFILE SCREEN
+================================ -->
+<div id="screen-profile" class="screen">
+  <div class="profile-header">
+    <div class="profile-avatar">😎</div>
+    <div class="profile-name">Alex</div>
+    <div class="profile-join">Playing since June 2026</div>
+  </div>
+
+  <div class="profile-body">
+    <div class="profile-stats-grid">
+      <div class="profile-stat-card">
+        <div class="ps-value">14</div>
+        <div class="ps-label">Games Played</div>
+      </div>
+      <div class="profile-stat-card">
+        <div class="ps-value">9</div>
+        <div class="ps-label">Games Won</div>
+      </div>
+      <div class="profile-stat-card">
+        <div class="ps-value">342</div>
+        <div class="ps-label">Squares Captured</div>
+      </div>
+      <div class="profile-stat-card">
+        <div class="ps-value">3🔥</div>
+        <div class="ps-label">Win Streak</div>
+      </div>
+    </div>
+
+    <div class="section-label" style="margin-top:24px;">Appearance</div>
+    <div class="appearance-row">
+      <div class="appearance-label"><span>🎨</span> App Theme</div>
+      <div class="theme-pill">
+        <button class="theme-pill-btn" data-theme="light" onclick="setTheme('light')">☀️ Light</button>
+        <button class="theme-pill-btn" data-theme="dark"  onclick="setTheme('dark')">🌙 Dark</button>
+      </div>
+    </div>
+
+    <div class="section-label" style="margin-top:24px;">Board Themes</div>
+    <div class="theme-grid">
+      <div class="theme-card selected" style="background: var(--surface);">
+        <div class="theme-preview" style="background: linear-gradient(135deg, #1E1B4B, #2D2A6E);"></div>
+        <div class="theme-name">Default</div>
+      </div>
+      <div class="theme-card" style="background: var(--surface);">
+        <div class="theme-preview" style="background: linear-gradient(135deg, #0d1117, #7928ca); box-shadow: inset 0 0 10px rgba(121,40,202,0.5);"></div>
+        <div class="theme-name" style="color: var(--violet-light);">Neon Grid</div>
+      </div>
+      <div class="theme-card locked" style="background: var(--surface);">
+        <div class="theme-preview" style="background: linear-gradient(135deg, #2d1600, #5c3800);"></div>
+        <div class="theme-name">Chalkboard</div>
+        <div class="theme-lock">🔒</div>
+      </div>
+      <div class="theme-card locked" style="background: var(--surface);">
+        <div class="theme-preview" style="background: linear-gradient(135deg, #f0e8d0, #e0d0a0); box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1);"></div>
+        <div class="theme-name">Notebook</div>
+        <div class="theme-lock">🔒</div>
+      </div>
+      <div class="theme-card locked" style="background: var(--surface);">
+        <div class="theme-preview" style="background: linear-gradient(135deg, #000, #1a0000); border: 1px solid #ff0000;"></div>
+        <div class="theme-name">Retro Arcade</div>
+        <div class="theme-lock">🔒</div>
+      </div>
+    </div>
+
+    <div class="section-label" style="margin-top:24px;">Achievements</div>
+    <div class="achievement-row" style="flex-direction: column; overflow: visible;">
+      <div class="achievement" style="min-width: unset;">
+        <div class="ach-icon">🏆</div>
+        <div>
+          <div class="ach-name">First Victory</div>
+          <div class="ach-desc">Win your first game — unlocked!</div>
+        </div>
+      </div>
+      <div class="achievement" style="min-width: unset;">
+        <div class="ach-icon">🔥</div>
+        <div>
+          <div class="ach-name">On a Roll</div>
+          <div class="ach-desc">Win 3 games in a row — unlocked!</div>
+        </div>
+      </div>
+      <div class="achievement locked" style="min-width: unset;">
+        <div class="ach-icon">🏗️</div>
+        <div>
+          <div class="ach-name">Architect</div>
+          <div class="ach-desc">Play 100 games (14/100)</div>
+        </div>
+      </div>
+      <div class="achievement locked" style="min-width: unset;">
+        <div class="ach-icon">😤</div>
+        <div>
+          <div class="ach-name">Greedy</div>
+          <div class="ach-desc">Capture 3+ squares in one turn</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <nav class="bottom-nav">
+    <div class="nav-item" onclick="showHome()">
+      <div class="nav-icon">🏠</div>
+      <div class="nav-label">Home</div>
+    </div>
+    <div class="nav-item" onclick="showSetup()">
+      <div class="nav-icon">🎮</div>
+      <div class="nav-label">Play</div>
+    </div>
+    <div class="nav-item active">
+      <div class="nav-icon">👤</div>
+      <div class="nav-label">Profile</div>
+    </div>
+  </nav>
+</div>
+
+<!-- Toast notification -->
+<div class="toast" id="toast">
+  <div class="toast-icon" id="toast-icon">🏆</div>
+  <div class="toast-content">
+    <div class="toast-tag">Achievement Unlocked</div>
+    <div class="toast-text" id="toast-text">First Victory!</div>
+  </div>
+</div>
+
+<script src="js/toast.js"></script>
+<script src="js/navigation.js"></script>
+<script src="js/game.js"></script>
+<script src="js/wyr.js"></script>
+<script src="js/speed.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
