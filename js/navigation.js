@@ -1,4 +1,4 @@
-const screens = ['home', 'setup', 'game', 'victory', 'wyr', 'speed', 'profile'];
+const screens = ['home', 'setup', 'game', 'victory', 'profile'];
 
 function showScreen(id, direction = 'forward') {
   screens.forEach(s => {
@@ -15,8 +15,6 @@ function showScreen(id, direction = 'forward') {
 
 function showHome()    { showScreen('home', 'back'); }
 function showSetup()   { showScreen('setup'); }
-function showWYR()     { showScreen('wyr'); wyrRender(); }
-function showSpeed()   { showScreen('speed'); speedReset(); }
 function showProfile() { showScreen('profile'); }
 
 function showVictory(winnerIdx) {
