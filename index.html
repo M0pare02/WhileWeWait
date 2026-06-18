@@ -1,299 +1,225 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>While We Wait - test</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="dark">
+  <title>While We Wait</title>
+  <link rel="stylesheet" href="styles/main.css">
 </head>
 <body>
 
-<!-- ==============================
-     HOME SCREEN
-================================ -->
-<div id="screen-home" class="screen active">
-  <div class="home-hero">
-    <div class="floating-bubbles">
-      <div class="bubble"></div>
-      <div class="bubble"></div>
-      <div class="bubble"></div>
-      <div class="bubble"></div>
-      <div class="bubble"></div>
-    </div>
-<div class="home-label">✦ Your next 5 minutes</div>
-    <h1 class="home-title">While We<br><span>Wait</span></h1>
-    <p class="home-subtitle">Skip the scroll. Play together while you wait.</p>
-  </div>
+  <div class="phone-shell">
 
-  <div class="scroll-content">
-    <div class="section-label">Continue</div>
-    <div class="continue-card" onclick="showSetup()">
-      <div class="continue-icon">⬛</div>
-      <div class="continue-info">
-        <div class="continue-tag">Grid Grab</div>
-        <div class="continue-name">Game in progress</div>
-        <div class="continue-meta">Alex vs Jordan · Standard board · 24 squares left</div>
+    <!-- ═══ HERO ═══════════════════════════════════════ -->
+    <section class="hero">
+      <div class="hero__bg-texture" aria-hidden="true"></div>
+
+      <!-- Starfield -->
+      <div class="hero__starfield" aria-hidden="true">
+        <span class="star star--xl"  style="top:8%;  left:12%"></span>
+        <span class="star star--lg"  style="top:22%; left:52%"></span>
+        <span class="star star--md"  style="top:5%;  left:38%"></span>
+        <span class="star star--sm"  style="top:15%; left:28%"></span>
+        <span class="star star--sm"  style="top:35%; left:6%"></span>
+        <span class="star star--md"  style="top:60%; left:18%"></span>
+        <span class="star star--sm"  style="top:70%; left:42%"></span>
+        <span class="star star--lg"  style="top:78%; left:82%"></span>
+        <span class="star star--sm"  style="top:10%; left:72%"></span>
+        <span class="star star--md white" style="top:48%; left:88%; background:#fff; box-shadow:0 0 6px 2px rgba(255,255,255,0.8)"></span>
+        <span class="star star--sm"  style="top:88%; left:10%"></span>
+        <span class="star star--sm"  style="top:92%; left:58%"></span>
+        <span class="star star--md"  style="top:3%;  left:88%"></span>
+        <span class="star star--sm"  style="top:55%; left:60%"></span>
+        <span class="star star--lg"  style="top:30%; left:78%"></span>
       </div>
-      <div class="continue-arrow">›</div>
-    </div>
 
-    <div class="section-label">Quick Start</div>
-    <div class="quick-grid">
-      <div class="quick-card" onclick="showSetup()">
-        <span class="quick-emoji">⬛</span>
-        <div class="quick-name">Grid Grab</div>
-        <div class="quick-desc">Claim squares, outplay your rivals</div>
+      <!-- Text -->
+      <div class="hero__text">
+        <h1 class="hero__title">While<br>We Wait</h1>
+        <p class="hero__tagline">
+          <span class="hero__tagline-line1">Skip the scroll.</span>
+          <span class="hero__tagline-line2">Play together while you wait</span>
+        </p>
       </div>
-      <div class="quick-card" style="opacity:0.6; cursor:default;">
-        <span class="quick-emoji">🤔</span>
-        <div class="quick-name">Would You Rather</div>
-        <div class="quick-desc" style="color: var(--violet-light); font-weight: 700;">Coming soon</div>
-      </div>
-      <div class="quick-card" style="opacity:0.6; cursor:default;">
-        <span class="quick-emoji">⚡</span>
-        <div class="quick-name">Speed Categories</div>
-        <div class="quick-desc" style="color: var(--violet-light); font-weight: 700;">Coming soon</div>
-      </div>
-      <div class="quick-card" style="opacity:0.6; cursor:default;">
-        <span class="quick-emoji">🎭</span>
-        <div class="quick-name">Trivia Blitz</div>
-        <div class="quick-desc" style="color: var(--violet-light); font-weight: 700;">Coming soon</div>
-      </div>
-    </div>
 
-  </div>
-</div>
+    </section>
 
+    <!-- ═══ SCROLLABLE CONTENT ══════════════════════════ -->
+    <main class="content">
 
-<!-- ==============================
-     GAME SETUP SCREEN
-================================ -->
-<div id="screen-setup" class="screen">
-  <div class="setup-header">
-    <div class="setup-back" onclick="showHome()">←</div>
-    <h2 class="setup-title">Grid Grab</h2>
-    <p class="setup-subtitle">Set up your game — takes 10 seconds</p>
-  </div>
-
-  <div class="scroll-content setup-body">
-    <div class="setup-section">
-      <div class="setup-section-title">Board Size</div>
-      <div class="size-options">
-        <div class="size-option" onclick="selectSize(this, 'quick')" data-size="quick">
-          <div class="size-left">
-            <span class="size-emoji">⚡</span>
-            <div>
-              <div class="size-name">Quick</div>
-              <div class="size-dims">4 × 6 grid · 15 squares</div>
-            </div>
+      <!-- QUICK CONTINUE -->
+      <section class="section">
+        <p class="section__label">Quick Continue</p>
+        <div class="card card--row">
+          <div class="card__thumbnail" aria-hidden="true"></div>
+          <div class="card__body">
+            <h2 class="card__title">Grid Grab</h2>
+            <p class="card__subtitle">Alex vs Jordan &bull; Standard Board</p>
+            <p class="card__meta">24 squares left</p>
           </div>
-          <div class="size-time">~3 min</div>
-        </div>
-        <div class="size-option selected" onclick="selectSize(this, 'standard')" data-size="standard">
-          <div class="size-left">
-            <span class="size-emoji">🎯</span>
-            <div>
-              <div class="size-name">Standard</div>
-              <div class="size-dims">8 × 12 grid · 77 squares</div>
-            </div>
-          </div>
-          <div class="size-time">~10 min</div>
-        </div>
-        <div class="size-option" onclick="selectSize(this, 'long')" data-size="long">
-          <div class="size-left">
-            <span class="size-emoji">✈️</span>
-            <div>
-              <div class="size-name">Long Wait</div>
-              <div class="size-dims">12 × 16 grid · 165 squares</div>
-            </div>
-          </div>
-          <div class="size-time">~20 min</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="setup-section">
-      <div class="setup-section-title">Players</div>
-      <div class="player-list" id="player-list">
-        <div class="player-entry">
-          <div class="player-row" data-color="#FF6B6B">
-            <div class="player-color-dot" style="background:#FF6B6B;" onclick="toggleColorPicker(this)">
-              <div class="dot-badge">✎</div>
-            </div>
-            <input class="player-name-input" type="text" placeholder="Player 1 name" value="Alex">
-            <div class="remove-player" onclick="removePlayer(this)">−</div>
+          <div class="card__chevron" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M7.5 5L12.5 10L7.5 15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
           </div>
         </div>
-        <div class="player-entry">
-          <div class="player-row" data-color="#4FC3F7">
-            <div class="player-color-dot" style="background:#4FC3F7;" onclick="toggleColorPicker(this)">
-              <div class="dot-badge">✎</div>
-            </div>
-            <input class="player-name-input" type="text" placeholder="Player 2 name" value="Jordan">
-            <div class="remove-player" onclick="removePlayer(this)">−</div>
+      </section>
+
+      <!-- QUICK START -->
+      <section class="section">
+        <p class="section__label">Quick Start</p>
+        <div class="card card--row card--accent">
+          <div class="card__icon card__icon--gift" aria-hidden="true">
+            <!-- Gift box SVG -->
+            <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="3" y="11" width="20" height="12" rx="2" stroke="#9B7BFF" stroke-width="1.6"/>
+              <rect x="6" y="14" width="14" height="9" rx="1" fill="#9B7BFF" fill-opacity="0.12"/>
+              <line x1="13" y1="11" x2="13" y2="23" stroke="#9B7BFF" stroke-width="1.4"/>
+              <path d="M13 11 C13 11 10 9 10 7 C10 5.5 11.2 5 12 5 C13 5 13 6.5 13 6.5 C13 6.5 13 5 14 5 C14.8 5 16 5.5 16 7 C16 9 13 11 13 11Z"
+                    stroke="#9B7BFF" stroke-width="1.4" fill="none"/>
+              <rect x="3" y="8" width="20" height="4" rx="1.5" stroke="#9B7BFF" stroke-width="1.5"/>
+            </svg>
+          </div>
+          <div class="card__body">
+            <h2 class="card__title">Find us something</h2>
+            <p class="card__subtitle">Surprise me with a game</p>
+          </div>
+          <div class="card__chevron" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M7.5 5L12.5 10L7.5 15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
           </div>
         </div>
-      </div>
-      <div style="height:10px;"></div>
-      <div class="add-player-btn" onclick="addPlayer()">＋ Add another player</div>
-    </div>
-  </div>
+      </section>
 
-  <button class="start-game-btn" onclick="startGame()">Start Game →</button>
-</div>
+      <!-- THE MOMENTS -->
+      <section class="section">
+        <p class="section__label">The Moments</p>
+        <div class="moments-grid">
 
+          <!-- Compete -->
+          <div class="moment-card">
+            <div class="moment-card__icon moment-card__icon--trophy" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6 3H18V13C18 16.314 15.314 19 12 19C8.686 19 6 16.314 6 13V3Z"
+                      stroke="#FFD700" stroke-width="1.6"/>
+                <path d="M6 6H2V9C2 10.657 3.343 12 5 12H6" stroke="#FFD700" stroke-width="1.5" stroke-linecap="round"/>
+                <path d="M18 6H22V9C22 10.657 20.657 12 19 12H18" stroke="#FFD700" stroke-width="1.5" stroke-linecap="round"/>
+                <line x1="12" y1="19" x2="12" y2="22" stroke="#FFD700" stroke-width="1.5" stroke-linecap="round"/>
+                <line x1="8"  y1="22" x2="16" y2="22" stroke="#FFD700" stroke-width="1.5" stroke-linecap="round"/>
+                <path d="M10 9L11.5 12H12.5L14 9" stroke="#FFD700" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" opacity="0.6"/>
+              </svg>
+            </div>
+            <h3 class="moment-card__title">Compete</h3>
+            <p class="moment-card__desc">Challenge your crew</p>
+          </div>
 
-<!-- ==============================
-     GAME SCREEN (Grid Grab)
-================================ -->
-<div id="screen-game" class="screen">
-  <div class="game-header">
-    <div class="game-back" onclick="showHome()">← Home</div>
-    <div class="game-title-row">
-      <div class="game-title">Grid Grab</div>
-      <div class="game-size-badge" id="game-size-label">Standard</div>
-    </div>
-    <div class="score-bar" id="score-bar"></div>
-  </div>
+          <!-- Laugh -->
+          <div class="moment-card">
+            <div class="moment-card__icon moment-card__icon--laugh" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="12" cy="12" r="9" stroke="#FFD700" stroke-width="1.6"/>
+                <circle cx="9"  cy="10" r="1.2" fill="#FFD700"/>
+                <circle cx="15" cy="10" r="1.2" fill="#FFD700"/>
+                <path d="M8 14.5C8.5 16.5 10 18 12 18C14 18 15.5 16.5 16 14.5"
+                      stroke="#FFD700" stroke-width="1.6" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <h3 class="moment-card__title">Laugh</h3>
+            <p class="moment-card__desc">Lighthearted and fun</p>
+          </div>
 
-  <div class="turn-banner">
-    <div class="turn-dot" id="turn-dot"></div>
-    <div class="turn-text"><span class="turn-name" id="turn-name">Alex's</span> turn — draw a line</div>
-  </div>
+          <!-- Talk -->
+          <div class="moment-card">
+            <div class="moment-card__icon moment-card__icon--talk" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M4 4H20C21.1 4 22 4.9 22 6V15C22 16.1 21.1 17 20 17H8L4 21V6C4 4.9 4.9 4 4 4"
+                      stroke="#9B7BFF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M4 4H20C21.1 4 22 4.9 22 6V15C22 16.1 21.1 17 20 17H8L4 21V6C4 4.9 4.9 4 6 4H4Z"
+                      stroke="#9B7BFF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                <line x1="8"  y1="9"  x2="16" y2="9"  stroke="#9B7BFF" stroke-width="1.3" stroke-linecap="round" opacity="0.6"/>
+                <line x1="8"  y1="12" x2="14" y2="12" stroke="#9B7BFF" stroke-width="1.3" stroke-linecap="round" opacity="0.6"/>
+              </svg>
+            </div>
+            <h3 class="moment-card__title">Talk</h3>
+            <p class="moment-card__desc">Spark great conversations</p>
+          </div>
 
-  <div class="board-area">
-    <div id="dots-board">
-      <svg id="game-svg"></svg>
-    </div>
-  </div>
-</div>
+          <!-- Think -->
+          <div class="moment-card">
+            <div class="moment-card__icon moment-card__icon--think" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 3C8.686 3 6 5.686 6 9C6 11.12 7.1 12.98 8.75 14.06V16H15.25V14.06C16.9 12.98 18 11.12 18 9C18 5.686 15.314 3 12 3Z"
+                      stroke="#64C8FF" stroke-width="1.6" stroke-linejoin="round"/>
+                <rect x="9" y="16" width="6" height="2" rx="1" stroke="#64C8FF" stroke-width="1.4"/>
+                <rect x="9.5" y="18" width="5" height="2" rx="1" stroke="#64C8FF" stroke-width="1.4"/>
+                <line x1="12" y1="6"  x2="12" y2="7"  stroke="#64C8FF" stroke-width="1.2" stroke-linecap="round" opacity="0.5"/>
+                <line x1="9"  y1="7"  x2="9.7" y2="8" stroke="#64C8FF" stroke-width="1.2" stroke-linecap="round" opacity="0.5"/>
+                <line x1="15" y1="7"  x2="14.3" y2="8" stroke="#64C8FF" stroke-width="1.2" stroke-linecap="round" opacity="0.5"/>
+              </svg>
+            </div>
+            <h3 class="moment-card__title">Think</h3>
+            <p class="moment-card__desc">Puzzles &amp; brain games</p>
+          </div>
 
+        </div>
+      </section>
 
-<!-- ==============================
-     VICTORY SCREEN
-================================ -->
-<div id="screen-victory" class="screen">
-  <div class="victory-emoji">🏆</div>
-  <div class="victory-label">Winner!</div>
-  <div class="victory-winner"><span id="winner-name">Alex</span> wins!</div>
-  <div class="victory-sub" id="victory-sub">Captured the most squares</div>
+    </main>
 
-  <div class="victory-scores" id="victory-scores"></div>
+    <!-- ═══ BOTTOM NAV ══════════════════════════════════ -->
+    <nav class="bottom-nav" aria-label="Main navigation">
 
-  <div class="victory-actions">
-    <button class="victory-btn-primary" onclick="showSetup()">Play Again</button>
-    <button class="victory-btn-secondary" onclick="showHome()">Back to Home</button>
-  </div>
-</div>
-
-
-
-<!-- ==============================
-     PROFILE SCREEN
-================================ -->
-<div id="screen-profile" class="screen">
-  <div class="profile-header">
-    <div class="profile-avatar">😎</div>
-    <div class="profile-name">Alex</div>
-    <div class="profile-join">Playing since June 2026</div>
-  </div>
-
-  <div class="profile-body">
-    <div class="profile-stats-grid">
-      <div class="profile-stat-card">
-        <div class="ps-value">14</div>
-        <div class="ps-label">Games Played</div>
-      </div>
-      <div class="profile-stat-card">
-        <div class="ps-value">9</div>
-        <div class="ps-label">Games Won</div>
-      </div>
-      <div class="profile-stat-card">
-        <div class="ps-value">342</div>
-        <div class="ps-label">Squares Captured</div>
-      </div>
-      <div class="profile-stat-card">
-        <div class="ps-value">3🔥</div>
-        <div class="ps-label">Win Streak</div>
-      </div>
-    </div>
-
-<div class="section-label" style="margin-top:24px;">Board Themes</div>
-    <div class="theme-grid">
-      <div class="theme-card selected" style="background: var(--surface);">
-        <div class="theme-preview" style="background: linear-gradient(135deg, #1E1B4B, #2D2A6E);"></div>
-        <div class="theme-name">Default</div>
-      </div>
-      <div class="theme-card" style="background: var(--surface);">
-        <div class="theme-preview" style="background: linear-gradient(135deg, #0d1117, #7928ca); box-shadow: inset 0 0 10px rgba(121,40,202,0.5);"></div>
-        <div class="theme-name" style="color: var(--violet-light);">Neon Grid</div>
-      </div>
-      <div class="theme-card locked" style="background: var(--surface);">
-        <div class="theme-preview" style="background: linear-gradient(135deg, #2d1600, #5c3800);"></div>
-        <div class="theme-name">Chalkboard</div>
-        <div class="theme-lock">🔒</div>
-      </div>
-      <div class="theme-card locked" style="background: var(--surface);">
-        <div class="theme-preview" style="background: linear-gradient(135deg, #f0e8d0, #e0d0a0); box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1);"></div>
-        <div class="theme-name">Notebook</div>
-        <div class="theme-lock">🔒</div>
-      </div>
-      <div class="theme-card locked" style="background: var(--surface);">
-        <div class="theme-preview" style="background: linear-gradient(135deg, #000, #1a0000); border: 1px solid #ff0000;"></div>
-        <div class="theme-name">Retro Arcade</div>
-        <div class="theme-lock">🔒</div>
-      </div>
-    </div>
-
-    <div class="section-label" style="margin-top:24px;">Achievements</div>
-    <div class="achievement-row" style="flex-direction: column; overflow: visible;">
-      <div class="achievement" style="min-width: unset;">
-        <div class="ach-icon">🏆</div>
-        <div>
-          <div class="ach-name">First Victory</div>
-          <div class="ach-desc">Win your first game — unlocked!</div>
+      <!-- Home (active) -->
+      <div class="bottom-nav__tab bottom-nav__tab--active" role="button" aria-current="page">
+        <div class="bottom-nav__pill">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 9.5L11 3L19 9.5V19C19 19.55 18.55 20 18 20H14V15H8V20H4C3.45 20 3 19.55 3 19V9.5Z"
+                  stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+          </svg>
+          <span class="bottom-nav__label">Home</span>
         </div>
       </div>
-      <div class="achievement" style="min-width: unset;">
-        <div class="ach-icon">🔥</div>
-        <div>
-          <div class="ach-name">On a Roll</div>
-          <div class="ach-desc">Win 3 games in a row — unlocked!</div>
-        </div>
+
+      <!-- Activities -->
+      <div class="bottom-nav__tab" role="button">
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="3"  y="3"  width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.6"/>
+          <rect x="12" y="3"  width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.6"/>
+          <rect x="3"  y="12" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.6"/>
+          <rect x="12" y="12" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.6"/>
+        </svg>
+        <span class="bottom-nav__label">Activities</span>
       </div>
-      <div class="achievement locked" style="min-width: unset;">
-        <div class="ach-icon">🏗️</div>
-        <div>
-          <div class="ach-name">Architect</div>
-          <div class="ach-desc">Play 100 games (14/100)</div>
-        </div>
+
+      <!-- In Progress -->
+      <div class="bottom-nav__tab" role="button">
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="4" y="2" width="14" height="2.5" rx="1.25" stroke="currentColor" stroke-width="1.5"/>
+          <rect x="4" y="17.5" width="14" height="2.5" rx="1.25" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M5 4.5L10.5 11L5 17.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M17 4.5L11.5 11L17 17.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="bottom-nav__label">In Progress</span>
       </div>
-      <div class="achievement locked" style="min-width: unset;">
-        <div class="ach-icon">😤</div>
-        <div>
-          <div class="ach-name">Greedy</div>
-          <div class="ach-desc">Capture 3+ squares in one turn</div>
-        </div>
+
+      <!-- Groups -->
+      <div class="bottom-nav__tab" role="button">
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="8.5"  cy="7.5" r="3" stroke="currentColor" stroke-width="1.6"/>
+          <circle cx="15"   cy="8"   r="2.5" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M2 18C2 15.24 5 13 8.5 13C12 13 15 15.24 15 18"
+                stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+          <path d="M15 13C17.5 13 20 14.6 20 17"
+                stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <span class="bottom-nav__label">Groups</span>
       </div>
-    </div>
+
+    </nav>
+
   </div>
 
-</div>
-
-<!-- Toast notification -->
-<div class="toast" id="toast">
-  <div class="toast-icon" id="toast-icon">🏆</div>
-  <div class="toast-content">
-    <div class="toast-tag">Achievement Unlocked</div>
-    <div class="toast-text" id="toast-text">First Victory!</div>
-  </div>
-</div>
-
-<script src="js/toast.js"></script>
-<script src="js/navigation.js"></script>
-<script src="js/game.js"></script>
-<script src="js/main.js"></script>
 </body>
 </html>
