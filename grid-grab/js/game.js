@@ -29,23 +29,21 @@
   function initCanvas() {
     const wrap = document.getElementById('canvasWrap');
     const rect = wrap.getBoundingClientRect();
-    const availW = rect.width  - 32; // 16px padding each side
-    const availH = rect.height - 24;
+    const availW = rect.width  - 50; 
+    const availH = rect.height - 50;
 
-    const maxCell = 72;
     cellSize = Math.min(
       availW / (state.cols - 1),
-      availH / (state.rows - 1),
-      maxCell
+      availH / (state.rows - 1)
     );
 
     const gridW = cellSize * (state.cols - 1);
     const gridH = cellSize * (state.rows - 1);
 
-    const cssW = gridW + 40;
-    const cssH = gridH + 40;
-    offsetX = 20;
-    offsetY = 20;
+    const cssW = gridW + 50;
+    const cssH = gridH + 50;
+    offsetX = 25;
+    offsetY = 25;
 
     canvas.style.width  = cssW + 'px';
     canvas.style.height = cssH + 'px';

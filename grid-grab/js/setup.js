@@ -3,9 +3,9 @@
 const PALETTE = ['#FF6B6B', '#45B7D1', '#FFC947', '#4ECDC4', '#FF6B9D', '#98D856'];
 
 const SIZES = {
-  small:  { cols: 4, rows: 5 },
-  medium: { cols: 5, rows: 6 },
-  large:  { cols: 6, rows: 8 },
+  small:  { cols: 3, rows: 5 },
+  medium: { cols: 4, rows: 7 },
+  large:  { cols: 5, rows: 9 },
 };
 
 let players = [

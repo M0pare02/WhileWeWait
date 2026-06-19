@@ -2,13 +2,7 @@
 
 const GGEngine = (() => {
 
-  const SIZES = {
-    small:  { cols: 4, rows: 5 },
-    medium: { cols: 5, rows: 6 },
-    large:  { cols: 6, rows: 8 },
-  };
-
-  function initState(config) {
+function initState(config) {
     const { cols, rows, players } = config;
     const hCount = rows * (cols - 1);       // horizontal line segments
     const vCount = (rows - 1) * cols;       // vertical line segments
@@ -118,5 +112,5 @@ const GGEngine = (() => {
     return { winners, maxScore, ranked };
   }
 
-  return { SIZES, initState, tryClaimLine, determineWinner };
+  return { initState, tryClaimLine, determineWinner };
 })();
