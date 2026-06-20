@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="dark">
+  <title>Grid Grab</title>
+  <link rel="stylesheet" href="../styles/main.css">
+  <link rel="stylesheet" href="styles/grid-grab.css">
+</head>
+<body>
+
+  <div class="phone-shell gg-shell" id="gameShell" style="display:flex; flex-direction:column; height:100dvh;">
+
+    <!-- Header -->
+    <header class="gg-header">
+      <button class="gg-back-btn" id="quitBtn" aria-label="Quit game">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12.5 15L7.5 10L12.5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <h1 class="gg-header__title">Grid Grab</h1>
+      <div class="gg-header__spacer"></div>
+    </header>
+
+    <!-- Score bar -->
+    <div class="gg-score-bar" id="scoreBar"></div>
+
+    <!-- Turn indicator -->
+    <div class="gg-turn-indicator" id="turnIndicator">
+      <span>'s turn</span>
+    </div>
+
+    <!-- Canvas -->
+    <div class="gg-canvas-wrap" id="canvasWrap">
+      <canvas id="gameCanvas" aria-label="Grid Grab game board"></canvas>
+    </div>
+
+    <!-- Winner overlay -->
+    <div class="gg-winner-overlay" id="winnerOverlay" hidden>
+      <div class="gg-winner-card">
+        <div class="gg-winner-card__trophy">🏆</div>
+        <h2 class="gg-winner-card__headline" id="winnerHeadline">Player 1 Wins!</h2>
+        <div class="gg-winner-card__scores" id="winnerScores"></div>
+        <div class="gg-winner-card__actions">
+          <button class="gg-play-again-btn" id="playAgainBtn">Play Again</button>
+          <button class="gg-home-btn" id="homeBtn">Home</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="js/engine.js"></script>
+  <script src="js/game.js"></script>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="dark">
+  <title>Grid Grab — Setup</title>
+  <link rel="stylesheet" href="../styles/main.css">
+  <link rel="stylesheet" href="styles/grid-grab.css">
+</head>
+<body>
+
+  <div class="phone-shell gg-shell" style="display:flex; flex-direction:column; height:100dvh;">
+
+    <!-- Header -->
+    <header class="gg-header">
+      <button class="gg-back-btn" aria-label="Back to home" onclick="location.href='../index.html'">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12.5 15L7.5 10L12.5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <h1 class="gg-header__title">Grid Grab</h1>
+      <div class="gg-header__spacer"></div>
+    </header>
+
+    <!-- Scrollable setup content -->
+    <main class="gg-setup-content">
+
+      <!-- Grid Size -->
+      <section>
+        <p class="gg-section__label">Grid Size</p>
+        <div class="gg-size-picker" role="radiogroup" aria-label="Grid size">
+          <button class="gg-size-option gg-size-option--active" data-size="small"
+                  role="radio" aria-checked="true">
+            <span class="gg-size-option__name">Small</span>
+            <span class="gg-size-option__detail">2×4 boxes · 5–10 min</span>
+          </button>
+          <button class="gg-size-option" data-size="medium"
+                  role="radio" aria-checked="false">
+            <span class="gg-size-option__name">Medium</span>
+            <span class="gg-size-option__detail">3×6 boxes · 10–20 min</span>
+          </button>
+          <button class="gg-size-option" data-size="large"
+                  role="radio" aria-checked="false">
+            <span class="gg-size-option__name">Large</span>
+            <span class="gg-size-option__detail">4×8 boxes · 20–35 min</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- Players -->
+      <section>
+        <div class="gg-section__header">
+          <p class="gg-section__label">Players</p>
+          <div class="gg-player-count-controls">
+            <button class="gg-count-btn" id="removePlayer" aria-label="Remove player">−</button>
+            <span class="gg-count-display" id="playerCountDisplay">2</span>
+            <button class="gg-count-btn" id="addPlayer" aria-label="Add player">+</button>
+          </div>
+        </div>
+        <div class="gg-player-list" id="playerList"></div>
+      </section>
+
+    </main>
+
+    <!-- Color picker popover -->
+    <div class="gg-color-popover" id="colorPopover" hidden aria-label="Choose color">
+      <button class="gg-color-option" data-color="#FF6B6B" style="background:#FF6B6B" aria-label="Coral"></button>
+      <button class="gg-color-option" data-color="#45B7D1" style="background:#45B7D1" aria-label="Sky Blue"></button>
+      <button class="gg-color-option" data-color="#FFC947" style="background:#FFC947" aria-label="Amber"></button>
+      <button class="gg-color-option" data-color="#A855F7" style="background:#A855F7" aria-label="Purple"></button>
+      <button class="gg-color-option" data-color="#FF6B9D" style="background:#FF6B9D" aria-label="Hot Pink"></button>
+      <button class="gg-color-option" data-color="#98D856" style="background:#98D856" aria-label="Lime"></button>
+    </div>
+
+    <!-- Play button footer -->
+    <div class="gg-setup-footer">
+      <button class="gg-play-btn" id="playBtn">Play!</button>
+    </div>
+
+  </div>
+
+  <script src="js/setup.js"></script>
+</body>
+</html>

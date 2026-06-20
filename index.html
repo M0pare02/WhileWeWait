@@ -48,20 +48,43 @@
     <!-- ═══ SCROLLABLE CONTENT ══════════════════════════ -->
     <main class="content">
 
-      <!-- QUICK CONTINUE -->
-      <section class="section">
-        <p class="section__label">Quick Continue</p>
-        <div class="card card--row">
-          <div class="card__thumbnail" aria-hidden="true"></div>
+      <!-- CONTINUE -->
+      <section class="section" id="continue-section" hidden>
+        <p class="section__label">Continue</p>
+        <button class="card card--row card--accent continue-card" id="continue-card">
+          <div class="card__icon card__icon--gift" aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="3"  y="3"  width="7" height="7" rx="1.5" stroke="#9B7BFF" stroke-width="1.6"/>
+              <rect x="12" y="3"  width="7" height="7" rx="1.5" stroke="#9B7BFF" stroke-width="1.6"/>
+              <rect x="3"  y="12" width="7" height="7" rx="1.5" stroke="#9B7BFF" stroke-width="1.6"/>
+              <rect x="12" y="12" width="7" height="7" rx="1.5" stroke="#9B7BFF" stroke-width="1.6"/>
+            </svg>
+          </div>
           <div class="card__body">
-            <h2 class="card__title">Grid Grab</h2>
-            <p class="card__subtitle">Alex vs Jordan &bull; Standard Board</p>
-            <p class="card__meta">24 squares left</p>
+            <h2 class="card__title" id="continue-title">Grid Grab</h2>
+            <div class="continue-players" id="continue-players"></div>
           </div>
           <div class="card__chevron" aria-hidden="true">
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M7.5 5L12.5 10L7.5 15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
+          </div>
+        </button>
+      </section>
+
+      <!-- GETTING STARTED -->
+      <section class="section" id="getting-started-section">
+        <p class="section__label">Getting Started</p>
+        <div class="card card--getting-started">
+          <div class="getting-started__icon" aria-hidden="true">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="14" cy="14" r="11" stroke="#9B7BFF" stroke-width="1.6"/>
+              <path d="M11 9.5L19 14L11 18.5V9.5Z" stroke="#9B7BFF" stroke-width="1.5" stroke-linejoin="round" fill="rgba(107,78,255,0.2)"/>
+            </svg>
+          </div>
+          <div class="getting-started__text">
+            <h2 class="getting-started__title">No active games yet</h2>
+            <p class="getting-started__subtitle">Pick a game below to get started with your group</p>
           </div>
         </div>
       </section>
@@ -93,74 +116,71 @@
         </div>
       </section>
 
-      <!-- THE MOMENTS -->
+      <!-- QUICK GAMES -->
       <section class="section">
-        <p class="section__label">The Moments</p>
-        <div class="moments-grid">
+        <p class="section__label">Quick Games</p>
+        <div class="games-grid">
 
-          <!-- Compete -->
-          <div class="moment-card">
-            <div class="moment-card__icon moment-card__icon--trophy" aria-hidden="true">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M6 3H18V13C18 16.314 15.314 19 12 19C8.686 19 6 16.314 6 13V3Z"
-                      stroke="#FFD700" stroke-width="1.6"/>
-                <path d="M6 6H2V9C2 10.657 3.343 12 5 12H6" stroke="#FFD700" stroke-width="1.5" stroke-linecap="round"/>
-                <path d="M18 6H22V9C22 10.657 20.657 12 19 12H18" stroke="#FFD700" stroke-width="1.5" stroke-linecap="round"/>
-                <line x1="12" y1="19" x2="12" y2="22" stroke="#FFD700" stroke-width="1.5" stroke-linecap="round"/>
-                <line x1="8"  y1="22" x2="16" y2="22" stroke="#FFD700" stroke-width="1.5" stroke-linecap="round"/>
-                <path d="M10 9L11.5 12H12.5L14 9" stroke="#FFD700" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" opacity="0.6"/>
-              </svg>
+          <!-- Grid Grab (active) -->
+          <button class="game-card game-card--active" onclick="location.href='grid-grab/setup.html'">
+            <div class="game-card__image" aria-hidden="true"></div>
+            <div class="game-card__body">
+              <h3 class="game-card__title">Grid Grab</h3>
+              <p class="game-card__desc">Capture the most boxes, win!</p>
+              <div class="game-card__meta">
+                <span class="game-card__badge">
+                  <svg width="11" height="11" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <circle cx="6" cy="3.5" r="2" stroke="currentColor" stroke-width="1.3"/>
+                    <path d="M1.5 10.5C1.5 8.57 3.57 7 6 7C8.43 7 10.5 8.57 10.5 10.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+                  </svg>
+                  2–4
+                </span>
+                <span class="game-card__badge">
+                  <svg width="11" height="11" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <circle cx="6" cy="6" r="4.5" stroke="currentColor" stroke-width="1.3"/>
+                    <path d="M6 3.5V6L7.5 7.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                  10+ min
+                </span>
+                <span class="game-card__badge game-card__badge--compete">
+                  <svg width="11" height="11" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M3 1.5H9V6.5C9 8.157 7.657 9.5 6 9.5C4.343 9.5 3 8.157 3 6.5V1.5Z" stroke="currentColor" stroke-width="1.2"/>
+                    <path d="M3 3H1V4.5C1 5.328 1.672 6 2.5 6H3" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/>
+                    <path d="M9 3H11V4.5C11 5.328 10.328 6 9.5 6H9" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/>
+                    <line x1="6" y1="9.5" x2="6" y2="11" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/>
+                    <line x1="4" y1="11" x2="8" y2="11" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/>
+                  </svg>
+                  Compete
+                </span>
+              </div>
             </div>
-            <h3 class="moment-card__title">Compete</h3>
-            <p class="moment-card__desc">Challenge your crew</p>
+          </button>
+
+          <!-- Game 2 – Coming Soon -->
+          <div class="game-card game-card--soon" aria-disabled="true">
+            <div class="game-card__image" aria-hidden="true"></div>
+            <div class="game-card__body">
+              <h3 class="game-card__title">Game 2</h3>
+              <p class="game-card__coming-soon">Coming Soon</p>
+            </div>
           </div>
 
-          <!-- Laugh -->
-          <div class="moment-card">
-            <div class="moment-card__icon moment-card__icon--laugh" aria-hidden="true">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="12" cy="12" r="9" stroke="#FFD700" stroke-width="1.6"/>
-                <circle cx="9"  cy="10" r="1.2" fill="#FFD700"/>
-                <circle cx="15" cy="10" r="1.2" fill="#FFD700"/>
-                <path d="M8 14.5C8.5 16.5 10 18 12 18C14 18 15.5 16.5 16 14.5"
-                      stroke="#FFD700" stroke-width="1.6" stroke-linecap="round"/>
-              </svg>
+          <!-- Game 3 – Coming Soon -->
+          <div class="game-card game-card--soon" aria-disabled="true">
+            <div class="game-card__image" aria-hidden="true"></div>
+            <div class="game-card__body">
+              <h3 class="game-card__title">Game 3</h3>
+              <p class="game-card__coming-soon">Coming Soon</p>
             </div>
-            <h3 class="moment-card__title">Laugh</h3>
-            <p class="moment-card__desc">Lighthearted and fun</p>
           </div>
 
-          <!-- Talk -->
-          <div class="moment-card">
-            <div class="moment-card__icon moment-card__icon--talk" aria-hidden="true">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M4 4H20C21.1 4 22 4.9 22 6V15C22 16.1 21.1 17 20 17H8L4 21V6C4 4.9 4.9 4 4 4"
-                      stroke="#9B7BFF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M4 4H20C21.1 4 22 4.9 22 6V15C22 16.1 21.1 17 20 17H8L4 21V6C4 4.9 4.9 4 6 4H4Z"
-                      stroke="#9B7BFF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-                <line x1="8"  y1="9"  x2="16" y2="9"  stroke="#9B7BFF" stroke-width="1.3" stroke-linecap="round" opacity="0.6"/>
-                <line x1="8"  y1="12" x2="14" y2="12" stroke="#9B7BFF" stroke-width="1.3" stroke-linecap="round" opacity="0.6"/>
-              </svg>
+          <!-- Game 4 – Coming Soon -->
+          <div class="game-card game-card--soon" aria-disabled="true">
+            <div class="game-card__image" aria-hidden="true"></div>
+            <div class="game-card__body">
+              <h3 class="game-card__title">Game 4</h3>
+              <p class="game-card__coming-soon">Coming Soon</p>
             </div>
-            <h3 class="moment-card__title">Talk</h3>
-            <p class="moment-card__desc">Spark great conversations</p>
-          </div>
-
-          <!-- Think -->
-          <div class="moment-card">
-            <div class="moment-card__icon moment-card__icon--think" aria-hidden="true">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 3C8.686 3 6 5.686 6 9C6 11.12 7.1 12.98 8.75 14.06V16H15.25V14.06C16.9 12.98 18 11.12 18 9C18 5.686 15.314 3 12 3Z"
-                      stroke="#64C8FF" stroke-width="1.6" stroke-linejoin="round"/>
-                <rect x="9" y="16" width="6" height="2" rx="1" stroke="#64C8FF" stroke-width="1.4"/>
-                <rect x="9.5" y="18" width="5" height="2" rx="1" stroke="#64C8FF" stroke-width="1.4"/>
-                <line x1="12" y1="6"  x2="12" y2="7"  stroke="#64C8FF" stroke-width="1.2" stroke-linecap="round" opacity="0.5"/>
-                <line x1="9"  y1="7"  x2="9.7" y2="8" stroke="#64C8FF" stroke-width="1.2" stroke-linecap="round" opacity="0.5"/>
-                <line x1="15" y1="7"  x2="14.3" y2="8" stroke="#64C8FF" stroke-width="1.2" stroke-linecap="round" opacity="0.5"/>
-              </svg>
-            </div>
-            <h3 class="moment-card__title">Think</h3>
-            <p class="moment-card__desc">Puzzles &amp; brain games</p>
           </div>
 
         </div>
@@ -221,5 +241,35 @@
 
   </div>
 
+<script>
+  (function () {
+    var snap = null;
+    try {
+      var h = window.location.hash;
+      if (h.startsWith('#gg=')) snap = JSON.parse(decodeURIComponent(h.slice(4)));
+    } catch (_) {}
+    if (!snap) return;
+
+    document.getElementById('getting-started-section').hidden = true;
+    document.getElementById('continue-section').hidden = false;
+
+    var playersEl = document.getElementById('continue-players');
+    snap.players.forEach(function (p) {
+      var span = document.createElement('span');
+      span.className = 'continue-player';
+      var dot = document.createElement('span');
+      dot.className = 'continue-player__dot';
+      dot.style.background = p.color;
+      var name = document.createTextNode(p.name);
+      span.appendChild(dot);
+      span.appendChild(name);
+      playersEl.appendChild(span);
+    });
+
+    document.getElementById('continue-card').addEventListener('click', function () {
+      location.href = 'grid-grab/game.html' + window.location.hash;
+    });
+  })();
+</script>
 </body>
 </html>
