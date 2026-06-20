@@ -4,10 +4,33 @@
 
   // ─── Load config ──────────────────────────────────────
 
+  const savedSnap = (() => {
+    try {
+      const h = window.location.hash;
+      if (h.startsWith('#gg=')) return JSON.parse(decodeURIComponent(h.slice(4)));
+    } catch (_) {}
+    return null;
+  })();
   const config = JSON.parse(sessionStorage.getItem('gg_config') || 'null');
-  if (!config) { location.href = 'setup.html'; return; }
 
-  let state = GGEngine.initState(config);
+  const hasResumable = !!savedSnap;
+  if (!hasResumable && !config) { location.href = 'setup.html'; return; }
+
+  function restoreState(snap) {
+    return {
+      cols: snap.cols, rows: snap.rows, players: snap.players,
+      hLines: new Uint8Array(snap.hLines),
+      vLines: new Uint8Array(snap.vLines),
+      boxes:  new Int8Array(snap.boxes),
+      scores: snap.scores,
+      currentPlayer: snap.currentPlayer,
+      totalPlayers:  snap.totalPlayers,
+      filledBoxes:   snap.filledBoxes,
+      totalBoxes:    snap.totalBoxes,
+    };
+  }
+
+  let state = hasResumable ? restoreState(savedSnap) : GGEngine.initState(config);
 
   // Canvas context + geometry
   const canvas = document.getElementById('gameCanvas');
@@ -50,6 +73,22 @@
     canvas.width  = Math.round(cssW * dpr);
     canvas.height = Math.round(cssH * dpr);
     ctx.scale(dpr, dpr);
+  }
+
+  // ─── State snapshot (for quit navigation) ────────────
+
+  function buildStateHash() {
+    return '#gg=' + encodeURIComponent(JSON.stringify({
+      cols: state.cols, rows: state.rows, players: state.players,
+      hLines: Array.from(state.hLines),
+      vLines: Array.from(state.vLines),
+      boxes:  Array.from(state.boxes),
+      scores: state.scores.slice(),
+      currentPlayer: state.currentPlayer,
+      totalPlayers:  state.totalPlayers,
+      filledBoxes:   state.filledBoxes,
+      totalBoxes:    state.totalBoxes,
+    }));
   }
 
   // ─── Rendering ────────────────────────────────────────
@@ -377,7 +416,7 @@
   }
 
   document.getElementById('playAgainBtn').addEventListener('click', () => {
-    state = GGEngine.initState(config);
+    state = GGEngine.initState({ cols: state.cols, rows: state.rows, players: state.players });
     document.getElementById('winnerOverlay').hidden = true;
     lineAnims = [];
     boxAnims  = [];
@@ -391,10 +430,8 @@
   });
 
   document.getElementById('quitBtn').addEventListener('click', () => {
-    if (state.filledBoxes > 0 && document.getElementById('winnerOverlay').hidden) {
-      if (!confirm('Quit this game?')) return;
-    }
-    location.href = '../index.html';
+    const hasLines = state.hLines.some(v => v > 0) || state.vLines.some(v => v > 0);
+    location.href = hasLines ? '../index.html' + buildStateHash() : '../index.html';
   });
 
   // ─── Helpers ──────────────────────────────────────────

@@ -48,8 +48,32 @@
     <!-- ═══ SCROLLABLE CONTENT ══════════════════════════ -->
     <main class="content">
 
+      <!-- CONTINUE -->
+      <section class="section" id="continue-section" hidden>
+        <p class="section__label">Continue</p>
+        <button class="card card--row card--accent continue-card" id="continue-card">
+          <div class="card__icon card__icon--gift" aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="3"  y="3"  width="7" height="7" rx="1.5" stroke="#9B7BFF" stroke-width="1.6"/>
+              <rect x="12" y="3"  width="7" height="7" rx="1.5" stroke="#9B7BFF" stroke-width="1.6"/>
+              <rect x="3"  y="12" width="7" height="7" rx="1.5" stroke="#9B7BFF" stroke-width="1.6"/>
+              <rect x="12" y="12" width="7" height="7" rx="1.5" stroke="#9B7BFF" stroke-width="1.6"/>
+            </svg>
+          </div>
+          <div class="card__body">
+            <h2 class="card__title" id="continue-title">Grid Grab</h2>
+            <div class="continue-players" id="continue-players"></div>
+          </div>
+          <div class="card__chevron" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M7.5 5L12.5 10L7.5 15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </button>
+      </section>
+
       <!-- GETTING STARTED -->
-      <section class="section">
+      <section class="section" id="getting-started-section">
         <p class="section__label">Getting Started</p>
         <div class="card card--getting-started">
           <div class="getting-started__icon" aria-hidden="true">
@@ -217,5 +241,35 @@
 
   </div>
 
+<script>
+  (function () {
+    var snap = null;
+    try {
+      var h = window.location.hash;
+      if (h.startsWith('#gg=')) snap = JSON.parse(decodeURIComponent(h.slice(4)));
+    } catch (_) {}
+    if (!snap) return;
+
+    document.getElementById('getting-started-section').hidden = true;
+    document.getElementById('continue-section').hidden = false;
+
+    var playersEl = document.getElementById('continue-players');
+    snap.players.forEach(function (p) {
+      var span = document.createElement('span');
+      span.className = 'continue-player';
+      var dot = document.createElement('span');
+      dot.className = 'continue-player__dot';
+      dot.style.background = p.color;
+      var name = document.createTextNode(p.name);
+      span.appendChild(dot);
+      span.appendChild(name);
+      playersEl.appendChild(span);
+    });
+
+    document.getElementById('continue-card').addEventListener('click', function () {
+      location.href = 'grid-grab/game.html' + window.location.hash;
+    });
+  })();
+</script>
 </body>
 </html>
