@@ -1,6 +1,6 @@
 // Grid Grab setup screen
 
-const PALETTE = ['#FF6B6B', '#45B7D1', '#FFC947', '#4ECDC4', '#FF6B9D', '#98D856'];
+const PALETTE = ['#FF6B6B', '#45B7D1', '#FFC947', '#A855F7', '#FF6B9D', '#98D856'];
 
 const SIZES = {
   small:  { cols: 3, rows: 5 },
