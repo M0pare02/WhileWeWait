@@ -309,11 +309,9 @@
     // Online: ignore taps when it isn't this device's turn.
     if (online && state.currentPlayer !== mySeat) return;
 
-    const rect  = canvas.getBoundingClientRect();
-    const scaleX = canvas.width  / (rect.width  * dpr);
-    const scaleY = canvas.height / (rect.height * dpr);
-    const px = (e.clientX - rect.left) * scaleX / dpr;
-    const py = (e.clientY - rect.top)  * scaleY / dpr;
+    const rect = canvas.getBoundingClientRect();
+    const px = e.clientX - rect.left;
+    const py = e.clientY - rect.top;
 
     const line = findNearestLine(px, py);
     if (!line) return;
