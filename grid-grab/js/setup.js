@@ -14,6 +14,7 @@ let players = [
 ];
 let selectedSize = 'small';
 let activeSwatchIndex = null;
+let mode = 'local'; // 'local' = pass & play, 'online' = each on own phone
 
 // ─── Rendering ────────────────────────────────────────
 
@@ -25,6 +26,18 @@ function renderPlayers() {
     const row = document.createElement('div');
     row.className = 'gg-player-row';
     row.dataset.playerIndex = i;
+
+    // In online mode only the host (seat 0) is editable here — the other seats
+    // are filled by players joining from their own phones in the lobby.
+    if (mode === 'online' && i > 0) {
+      row.classList.add('gg-player-row--remote');
+      row.innerHTML = `
+        <button class="gg-color-swatch" style="background:${player.color}" disabled aria-hidden="true"></button>
+        <span class="gg-remote-label">Joins from their phone…</span>
+      `;
+      list.appendChild(row);
+      return;
+    }
 
     row.innerHTML = `
       <button class="gg-color-swatch" style="background:${player.color}"
@@ -47,6 +60,7 @@ function renderPlayers() {
   list.querySelectorAll('.gg-color-swatch').forEach(btn => {
     btn.addEventListener('click', e => {
       e.stopPropagation();
+      if (btn.disabled) return;
       const idx = parseInt(btn.dataset.index);
       openPopover(idx);
     });
@@ -87,6 +101,28 @@ function closePopover() {
   document.getElementById('colorPopover').hidden = true;
   activeSwatchIndex = null;
 }
+
+// ─── Mode Toggle ──────────────────────────────────────
+
+function applyMode() {
+  const isOnline = mode === 'online';
+  document.getElementById('playersLabel').textContent = isOnline ? 'You + players' : 'Players';
+  document.getElementById('playBtn').textContent = isOnline ? 'Create Room' : 'Play!';
+  renderPlayers();
+}
+
+document.querySelectorAll('.gg-mode-option').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.gg-mode-option').forEach(b => {
+      b.classList.remove('gg-mode-option--active');
+      b.setAttribute('aria-checked', 'false');
+    });
+    btn.classList.add('gg-mode-option--active');
+    btn.setAttribute('aria-checked', 'true');
+    mode = btn.dataset.mode;
+    applyMode();
+  });
+});
 
 // ─── Size Picker ──────────────────────────────────────
 
@@ -134,15 +170,36 @@ document.addEventListener('click', () => closePopover());
 
 // ─── Play Button ──────────────────────────────────────
 
-document.getElementById('playBtn').addEventListener('click', () => {
+document.getElementById('playBtn').addEventListener('click', async () => {
   const size = SIZES[selectedSize];
-  const config = {
-    cols: size.cols,
-    rows: size.rows,
-    players: players.map(p => ({ name: p.name.trim() || 'Player', color: p.color })),
-  };
-  try { sessionStorage.setItem('gg_config', JSON.stringify(config)); } catch (_) {}
-  location.href = 'game.html';
+
+  // Pass & play — unchanged offline flow.
+  if (mode === 'local') {
+    const config = {
+      cols: size.cols,
+      rows: size.rows,
+      players: players.map(p => ({ name: p.name.trim() || 'Player', color: p.color })),
+    };
+    try { sessionStorage.setItem('gg_config', JSON.stringify(config)); } catch (_) {}
+    location.href = 'game.html';
+    return;
+  }
+
+  // Online — create a room with the host as seat 0, then go to the lobby.
+  const btn = document.getElementById('playBtn');
+  btn.disabled = true;
+  btn.textContent = 'Creating…';
+  try {
+    const host = { name: players[0].name.trim() || 'Player 1', color: players[0].color };
+    const data = await GGNet.createRoom({ cols: size.cols, rows: size.rows }, players.length, host);
+    GGNet.set({ code: data.code, token: data.token, seat: 0, host: true });
+    location.href = `lobby.html?room=${data.code}`;
+  } catch (e) {
+    btn.disabled = false;
+    btn.textContent = 'Create Room';
+    console.error('createRoom failed:', e);
+    alert('Could not create room — ' + (e.message || 'unknown error') + '. Check the browser console for details.');
+  }
 });
 
 // ─── Helpers ──────────────────────────────────────────

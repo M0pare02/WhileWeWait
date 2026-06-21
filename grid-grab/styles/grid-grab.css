@@ -73,6 +73,60 @@
   margin-bottom: 10px;
 }
 
+/* ─── Mode Toggle (Pass & play / Online) ──────────── */
+
+.gg-mode-toggle {
+  display: flex;
+  gap: 8px;
+}
+
+.gg-mode-option {
+  flex: 1;
+  background: var(--bg-card);
+  border: 1px solid var(--border-card);
+  border-radius: 12px;
+  padding: 12px 10px;
+  cursor: pointer;
+  text-align: center;
+  color: var(--text-white);
+  font-family: inherit;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.gg-mode-option--active {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 1px rgba(107, 78, 255, 0.3);
+}
+
+.gg-mode-option__name {
+  display: block;
+  font-size: 0.92rem;
+  font-weight: 700;
+}
+
+.gg-mode-option__detail {
+  display: block;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* Muted placeholder rows for seats filled by remote players in the lobby. */
+.gg-player-row--remote {
+  opacity: 0.65;
+}
+
+.gg-player-row--remote .gg-color-swatch {
+  cursor: default;
+}
+
+.gg-remote-label {
+  flex: 1;
+  font-size: 0.9rem;
+  color: var(--text-label);
+  font-style: italic;
+}
+
 /* ─── Size Picker ─────────────────────────────────── */
 
 .gg-size-picker {
@@ -321,6 +375,124 @@
 
 .gg-play-btn:active {
   transform: scale(0.98);
+}
+
+/* ─── Lobby ───────────────────────────────────────── */
+
+.gg-lobby-content {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 24px 20px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.gg-lobby-panel[hidden] { display: none; }
+
+.gg-lobby-hint {
+  text-align: center;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-top: 6px;
+}
+
+.gg-room-code {
+  text-align: center;
+  font-size: 2.6rem;
+  font-weight: 800;
+  letter-spacing: 0.32em;
+  color: var(--accent-glow);
+  text-indent: 0.32em; /* compensate trailing letter-spacing for true centering */
+  background: var(--bg-card);
+  border: 1px solid var(--border-card);
+  border-radius: 16px;
+  padding: 18px 12px;
+  user-select: all;
+}
+
+.gg-seat-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.gg-seat {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-card);
+  border-radius: 12px;
+}
+
+.gg-seat--empty {
+  opacity: 0.55;
+  border-style: dashed;
+}
+
+.gg-seat__dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.gg-seat--empty .gg-seat__dot {
+  background: transparent !important;
+  border: 2px dashed var(--text-label);
+}
+
+.gg-seat__name {
+  flex: 1;
+  font-size: 0.95rem;
+  color: var(--text-white);
+}
+
+.gg-seat--empty .gg-seat__name {
+  color: var(--text-label);
+  font-style: italic;
+}
+
+.gg-seat__badge {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.gg-text-input {
+  width: 100%;
+  height: 48px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-card);
+  border-radius: 12px;
+  color: var(--text-white);
+  font-size: 1rem;
+  font-family: inherit;
+  padding: 0 14px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.gg-text-input:focus { border-color: var(--accent-primary); }
+
+.gg-code-input {
+  text-align: center;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.gg-color-row {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
 /* ─── Score Bar ───────────────────────────────────── */

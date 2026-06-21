@@ -2,7 +2,18 @@
 
 (function () {
 
-  // ─── Load config ──────────────────────────────────────
+  // ─── Mode detection ───────────────────────────────────
+  // Online mode = this device joined a room (gg_net present). Otherwise the
+  // original offline "pass & play" behavior is preserved unchanged.
+
+  const net      = (typeof GGNet !== 'undefined') ? GGNet.get() : null;
+  const online   = !!net;
+  const roomCode = online ? net.code : null;
+  const mySeat   = online ? net.seat : null;
+  let   lastVersion   = -1;     // last room version we've applied (online)
+  let   gamePollTimer = null;
+
+  // ─── Load config (offline) ────────────────────────────
 
   const savedSnap = (() => {
     try {
@@ -13,24 +24,14 @@
   })();
   const config = JSON.parse(sessionStorage.getItem('gg_config') || 'null');
 
-  const hasResumable = !!savedSnap;
-  if (!hasResumable && !config) { location.href = 'setup.html'; return; }
-
-  function restoreState(snap) {
-    return {
-      cols: snap.cols, rows: snap.rows, players: snap.players,
-      hLines: new Uint8Array(snap.hLines),
-      vLines: new Uint8Array(snap.vLines),
-      boxes:  new Int8Array(snap.boxes),
-      scores: snap.scores,
-      currentPlayer: snap.currentPlayer,
-      totalPlayers:  snap.totalPlayers,
-      filledBoxes:   snap.filledBoxes,
-      totalBoxes:    snap.totalBoxes,
-    };
+  // `state` is set synchronously for offline play; online play loads it from the
+  // server in boot() before the first render.
+  let state = null;
+  if (!online) {
+    const hasResumable = !!savedSnap;
+    if (!hasResumable && !config) { location.href = 'setup.html'; return; }
+    state = hasResumable ? GGEngine.deserialize(savedSnap) : GGEngine.initState(config);
   }
-
-  let state = hasResumable ? restoreState(savedSnap) : GGEngine.initState(config);
 
   // Canvas context + geometry
   const canvas = document.getElementById('gameCanvas');
@@ -78,17 +79,7 @@
   // ─── State snapshot (for quit navigation) ────────────
 
   function buildStateHash() {
-    return '#gg=' + encodeURIComponent(JSON.stringify({
-      cols: state.cols, rows: state.rows, players: state.players,
-      hLines: Array.from(state.hLines),
-      vLines: Array.from(state.vLines),
-      boxes:  Array.from(state.boxes),
-      scores: state.scores.slice(),
-      currentPlayer: state.currentPlayer,
-      totalPlayers:  state.totalPlayers,
-      filledBoxes:   state.filledBoxes,
-      totalBoxes:    state.totalBoxes,
-    }));
+    return '#gg=' + encodeURIComponent(JSON.stringify(GGEngine.serialize(state)));
   }
 
   // ─── Rendering ────────────────────────────────────────
@@ -226,7 +217,13 @@
   function updateTurnIndicator() {
     const p = state.players[state.currentPlayer];
     const el = document.getElementById('turnIndicator');
-    el.innerHTML = `<span><strong style="color:${p.color}">${escapeHtml(p.name)}</strong>'s turn</span>`;
+    if (online && state.currentPlayer !== mySeat) {
+      el.innerHTML = `<span>Waiting for <strong style="color:${p.color}">${escapeHtml(p.name)}</strong>…</span>`;
+    } else if (online) {
+      el.innerHTML = `<span><strong style="color:${p.color}">Your</strong> turn</span>`;
+    } else {
+      el.innerHTML = `<span><strong style="color:${p.color}">${escapeHtml(p.name)}</strong>'s turn</span>`;
+    }
   }
 
   // ─── Animation Loop ──────────────────────────────────
@@ -309,6 +306,9 @@
   async function handlePointerDown(e) {
     if (animating) return;
 
+    // Online: ignore taps when it isn't this device's turn.
+    if (online && state.currentPlayer !== mySeat) return;
+
     const rect  = canvas.getBoundingClientRect();
     const scaleX = canvas.width  / (rect.width  * dpr);
     const scaleY = canvas.height / (rect.height * dpr);
@@ -324,6 +324,8 @@
     const result = GGEngine.tryClaimLine(state, line.kind, line.row, line.col);
     if (!result) { animating = false; return; }
 
+    // Optimistically animate locally for instant feedback (the engine is
+    // deterministic, so the server will reach the same state).
     await animateLineDraw(line.kind, line.row, line.col, drawingPlayer);
     await animateBoxFills(result.completedBoxes, drawingPlayer);
 
@@ -335,6 +337,17 @@
 
     if (result.gameOver) {
       setTimeout(() => showWinnerOverlay(), 400);
+    }
+
+    // Online: report the move to the server (source of truth).
+    if (online) {
+      try {
+        const data = await GGNet.sendMove(roomCode, net.token, line.kind, line.row, line.col);
+        if (data && data.room) lastVersion = data.room.version; // skip re-applying our own move
+      } catch (err) {
+        // Rejected (stale/out-of-turn) — pull authoritative state and correct.
+        await resyncFromServer();
+      }
     }
   }
 
@@ -412,10 +425,16 @@
       scoresEl.appendChild(row);
     });
 
+    // Online: only the host can restart; others wait for them.
+    if (online) {
+      document.getElementById('playAgainBtn').hidden = !net.host;
+    }
+
     overlay.hidden = false;
   }
 
   document.getElementById('playAgainBtn').addEventListener('click', () => {
+    if (online) { onlinePlayAgain(); return; }
     state = GGEngine.initState({ cols: state.cols, rows: state.rows, players: state.players });
     document.getElementById('winnerOverlay').hidden = true;
     lineAnims = [];
@@ -426,10 +445,16 @@
   });
 
   document.getElementById('homeBtn').addEventListener('click', () => {
+    if (online && typeof GGNet !== 'undefined') GGNet.clear();
     location.href = '../index.html';
   });
 
   document.getElementById('quitBtn').addEventListener('click', () => {
+    if (online) {
+      if (typeof GGNet !== 'undefined') GGNet.clear();
+      location.href = '../index.html';
+      return;
+    }
     const hasLines = state.hLines.some(v => v > 0) || state.vLines.some(v => v > 0);
     location.href = hasLines ? '../index.html' + buildStateHash() : '../index.html';
   });
@@ -447,17 +472,147 @@
     return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;');
   }
 
+  // ─── Online sync ──────────────────────────────────────
+
+  function isLineUndrawn(s, kind, row, col) {
+    const arr = kind === 'h' ? s.hLines : s.vLines;
+    const idx = kind === 'h' ? (row * (s.cols - 1) + col) : (row * s.cols + col);
+    return arr[idx] === 0;
+  }
+
+  // Boxes that the given seat newly owns between two box arrays.
+  function diffNewBoxes(prevBoxes, nextBoxes, seat, cols) {
+    const out = [];
+    for (let i = 0; i < nextBoxes.length; i++) {
+      if (nextBoxes[i] === seat && prevBoxes[i] === -1) {
+        out.push({ row: Math.floor(i / (cols - 1)), col: i % (cols - 1) });
+      }
+    }
+    return out;
+  }
+
+  // Adopt an authoritative room from the server, animating the latest move if it
+  // was a single new line drawn by another player.
+  async function adoptRemote(room) {
+    const incoming = GGEngine.deserialize(room.state);
+    const lm = room.lastMove;
+    const animateIt = lm && lm.seat !== mySeat && isLineUndrawn(state, lm.kind, lm.row, lm.col);
+    const prevBoxes = state.boxes;
+
+    state = incoming;
+
+    // A finished→playing transition means the host restarted; clear the overlay.
+    if (room.status === 'playing') {
+      document.getElementById('winnerOverlay').hidden = true;
+    }
+
+    if (animateIt) {
+      animating = true;
+      await animateLineDraw(lm.kind, lm.row, lm.col, lm.seat);
+      await animateBoxFills(diffNewBoxes(prevBoxes, incoming.boxes, lm.seat, incoming.cols), lm.seat);
+      animating = false;
+    }
+
+    updateScoreBar();
+    updateTurnIndicator();
+    render();
+
+    if (room.status === 'finished') {
+      setTimeout(() => showWinnerOverlay(), 400);
+    }
+  }
+
+  async function resyncFromServer() {
+    try {
+      const data = await GGNet.pollRoom(roomCode);
+      if (data && data.room && data.room.state) {
+        lastVersion = data.room.version;
+        state = GGEngine.deserialize(data.room.state);
+        lineAnims = []; boxAnims = []; animating = false;
+        updateScoreBar();
+        updateTurnIndicator();
+        render();
+        if (data.room.status === 'finished') showWinnerOverlay();
+      }
+    } catch (_) { /* keep current state; the poll loop will retry */ }
+  }
+
+  async function onlinePlayAgain() {
+    const btn = document.getElementById('playAgainBtn');
+    btn.disabled = true;
+    try {
+      const data = await GGNet.startGame(roomCode, net.token);
+      lastVersion = data.room.version;
+      state = GGEngine.deserialize(data.room.state);
+      document.getElementById('winnerOverlay').hidden = true;
+      lineAnims = []; boxAnims = []; animating = false;
+      updateScoreBar();
+      updateTurnIndicator();
+      render();
+    } catch (e) { /* leave overlay up */ }
+    btn.disabled = false;
+  }
+
+  function startGamePolling() {
+    stopGamePolling();
+    const tick = async () => {
+      try {
+        const data = await GGNet.pollRoom(roomCode, lastVersion >= 0 ? lastVersion : undefined);
+        if (data && data.changed !== false && data.room && data.room.version > lastVersion) {
+          lastVersion = data.room.version;
+          // adoptRemote only animates moves made by *other* seats and is a no-op
+          // re-render for our own move, so it's safe to call unconditionally.
+          await adoptRemote(data.room);
+        }
+      } catch (e) { /* transient — keep polling */ }
+      gamePollTimer = setTimeout(tick, 1000);
+    };
+    tick();
+  }
+
+  function stopGamePolling() {
+    if (gamePollTimer) { clearTimeout(gamePollTimer); gamePollTimer = null; }
+  }
+
   // ─── Boot ─────────────────────────────────────────────
 
-  initCanvas();
-  updateScoreBar();
-  updateTurnIndicator();
-  render();
+  async function boot() {
+    if (online) {
+      try {
+        const data = await GGNet.pollRoom(roomCode);
+        if (!data || !data.room || !data.room.state) {
+          location.href = `lobby.html?room=${roomCode}`;
+          return;
+        }
+        lastVersion = data.room.version;
+        state = GGEngine.deserialize(data.room.state);
+      } catch (e) {
+        location.href = `lobby.html?room=${roomCode}`;
+        return;
+      }
+    }
+
+    initCanvas();
+    updateScoreBar();
+    updateTurnIndicator();
+    render();
+
+    if (online) {
+      startGamePolling();
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) stopGamePolling();
+        else startGamePolling();
+      });
+    }
+  }
 
   window.addEventListener('resize', () => {
+    if (!state) return;
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     initCanvas();
     render();
   });
+
+  boot();
 
 })();

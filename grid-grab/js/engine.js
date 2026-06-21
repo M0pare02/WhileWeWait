@@ -112,5 +112,43 @@ function initState(config) {
     return { winners, maxScore, ranked };
   }
 
-  return { initState, tryClaimLine, determineWinner };
+  // Whose turn it is — exposed so the server can validate move ownership.
+  function expectedSeat(state) { return state.currentPlayer; }
+
+  // ─── Serialization (JSON-safe: TypedArrays → plain arrays) ────
+  // Used for the resume hash, sessionStorage, and the networked room blob.
+
+  function serialize(state) {
+    return {
+      cols: state.cols, rows: state.rows, players: state.players,
+      hLines: Array.from(state.hLines),
+      vLines: Array.from(state.vLines),
+      boxes:  Array.from(state.boxes),
+      scores: state.scores.slice(),
+      currentPlayer: state.currentPlayer,
+      totalPlayers:  state.totalPlayers,
+      filledBoxes:   state.filledBoxes,
+      totalBoxes:    state.totalBoxes,
+    };
+  }
+
+  function deserialize(snap) {
+    return {
+      cols: snap.cols, rows: snap.rows, players: snap.players,
+      hLines: new Uint8Array(snap.hLines),
+      vLines: new Uint8Array(snap.vLines),
+      boxes:  new Int8Array(snap.boxes),
+      scores: snap.scores,
+      currentPlayer: snap.currentPlayer,
+      totalPlayers:  snap.totalPlayers,
+      filledBoxes:   snap.filledBoxes,
+      totalBoxes:    snap.totalBoxes,
+    };
+  }
+
+  return { initState, tryClaimLine, determineWinner, expectedSeat, serialize, deserialize };
 })();
+
+// Node export so serverless functions can `require` this same pure logic.
+// Harmless in the browser, where the `GGEngine` global is used instead.
+if (typeof module !== 'undefined' && module.exports) module.exports = GGEngine;
