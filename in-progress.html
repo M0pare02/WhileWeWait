@@ -135,15 +135,9 @@
     card.className = 'card card--row card--accent ip-game-card';
 
     var iconDiv = document.createElement('div');
-    iconDiv.className = 'card__icon';
+    iconDiv.className = 'card__icon card__icon--img';
     iconDiv.setAttribute('aria-hidden', 'true');
-    iconDiv.innerHTML =
-      '<svg width="24" height="24" viewBox="0 0 22 22" fill="none">' +
-        '<rect x="3"  y="3"  width="7" height="7" rx="1.5" stroke="#9B7BFF" stroke-width="1.6"/>' +
-        '<rect x="12" y="3"  width="7" height="7" rx="1.5" stroke="#9B7BFF" stroke-width="1.6"/>' +
-        '<rect x="3"  y="12" width="7" height="7" rx="1.5" stroke="#9B7BFF" stroke-width="1.6"/>' +
-        '<rect x="12" y="12" width="7" height="7" rx="1.5" stroke="#9B7BFF" stroke-width="1.6"/>' +
-      '</svg>';
+    iconDiv.innerHTML = '<img src="img/activities/grid%20grab/icon.png" alt="">';
 
     var bodyDiv = document.createElement('div');
     bodyDiv.className = 'card__body';
