@@ -63,6 +63,7 @@
           <div class="card__body">
             <h2 class="card__title" id="continue-title">Grid Grab</h2>
             <div class="continue-players" id="continue-players"></div>
+            <span class="ip-badge" id="continue-badge" hidden></span>
           </div>
           <div class="card__chevron" aria-hidden="true">
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -236,7 +237,9 @@
       </div>
 
       <!-- In Progress -->
-      <div class="bottom-nav__tab" role="button">
+      <div class="bottom-nav__tab" id="navInProgress" role="button" tabindex="0"
+           onclick="location.href='in-progress.html'"
+           onkeydown="if(event.key==='Enter'||event.key===' '){location.href='in-progress.html'}">
         <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
           <rect x="4" y="2" width="14" height="2.5" rx="1.25" stroke="currentColor" stroke-width="1.5"/>
           <rect x="4" y="17.5" width="14" height="2.5" rx="1.25" stroke="currentColor" stroke-width="1.5"/>
@@ -267,9 +270,12 @@
   (function () {
     var snap = null;
     try {
-      var h = window.location.hash;
-      if (h.startsWith('#gg=')) snap = JSON.parse(decodeURIComponent(h.slice(4)));
+      var stored = JSON.parse(localStorage.getItem('gg_resume') || 'null');
+      if (stored && stored.game === 'grid-grab' && stored.state && stored.players) {
+        snap = stored;
+      }
     } catch (_) {}
+
     if (!snap) return;
 
     document.getElementById('getting-started-section').hidden = true;
@@ -288,9 +294,28 @@
       playersEl.appendChild(span);
     });
 
+    var badgeEl = document.getElementById('continue-badge');
+    var isOnline = false;
+    try { var n = JSON.parse(sessionStorage.getItem('gg_net') || 'null'); isOnline = !!(n && n.code); } catch (_) {}
+    badgeEl.textContent = isOnline ? 'Online · ' + n.code : 'Pass & Play';
+    badgeEl.hidden = false;
+    if (isOnline) badgeEl.classList.add('ip-badge--online');
+
     document.getElementById('continue-card').addEventListener('click', function () {
-      location.href = 'grid-grab/game.html' + window.location.hash;
+      location.href = 'grid-grab/game.html';
     });
+  })();
+</script>
+<script>
+  (function () {
+    var hasResume = false;
+    try { var r = JSON.parse(localStorage.getItem('gg_resume') || sessionStorage.getItem('gg_resume') || 'null'); if (r && r.state) hasResume = true; } catch (_) {}
+    var hasNet = false;
+    try { var n = JSON.parse(sessionStorage.getItem('gg_net') || 'null'); if (n && n.code) hasNet = true; } catch (_) {}
+    if (!hasResume && !hasNet) {
+      var tab = document.getElementById('navInProgress');
+      if (tab) tab.classList.add('bottom-nav__tab--dim');
+    }
   })();
 </script>
 </body>

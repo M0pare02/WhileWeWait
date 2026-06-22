@@ -385,6 +385,7 @@ body {
   width: 100%;
   cursor: pointer;
   font-family: inherit;
+  text-align: left;
 }
 
 .continue-players {
@@ -451,4 +452,112 @@ body {
   font-size: 0.62rem;
   font-weight: 500;
   letter-spacing: 0.01em;
+}
+
+/* ─── Nav Dim State (no active games) ────────────────── */
+
+.bottom-nav__tab--dim {
+  opacity: 0.45;
+}
+
+/* ─── In Progress Page Header ────────────────────────── */
+
+.ip-page-header {
+  padding: 52px 24px 20px;
+  flex-shrink: 0;
+}
+
+.ip-page-header__title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--text-white);
+  line-height: 1.1;
+  margin-bottom: 4px;
+}
+
+.ip-page-header__subtitle {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+/* ─── In Progress Empty State ────────────────────────── */
+
+.ip-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 48px 24px;
+  gap: 12px;
+}
+
+.ip-empty-state__icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 18px;
+  background: rgba(107, 78, 255, 0.12);
+  border: 1px solid rgba(107, 78, 255, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 4px;
+}
+
+.ip-empty-state__title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-white);
+}
+
+.ip-empty-state__subtitle {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+/* ─── In Progress Game Card ──────────────────────────── */
+
+.ip-game-card {
+  width: 100%;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.ip-game-card:hover {
+  border-color: rgba(107, 78, 255, 0.7);
+  box-shadow:
+    0 0 0 1px rgba(107, 78, 255, 0.4),
+    0 0 18px rgba(107, 78, 255, 0.45);
+}
+
+.ip-card-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-top: 4px;
+}
+
+/* ─── In Progress Badges ─────────────────────────────── */
+
+.ip-badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 2px 8px;
+  width: fit-content;
+}
+
+.ip-badge--online {
+  color: var(--accent-glow);
+  background: rgba(107, 78, 255, 0.12);
+  border-color: rgba(107, 78, 255, 0.3);
 }

@@ -17,8 +17,8 @@
 
   const savedSnap = (() => {
     try {
-      const h = window.location.hash;
-      if (h.startsWith('#gg=')) return JSON.parse(decodeURIComponent(h.slice(4)));
+      const stored = JSON.parse(localStorage.getItem('gg_resume') || 'null');
+      if (stored && stored.game === 'grid-grab' && stored.state) return stored.state;
     } catch (_) {}
     return null;
   })();
@@ -74,12 +74,6 @@
     canvas.width  = Math.round(cssW * dpr);
     canvas.height = Math.round(cssH * dpr);
     ctx.scale(dpr, dpr);
-  }
-
-  // ─── State snapshot (for quit navigation) ────────────
-
-  function buildStateHash() {
-    return '#gg=' + encodeURIComponent(JSON.stringify(GGEngine.serialize(state)));
   }
 
   // ─── Rendering ────────────────────────────────────────
@@ -394,6 +388,7 @@
   // ─── Winner Screen ────────────────────────────────────
 
   function showWinnerOverlay() {
+    try { localStorage.removeItem('gg_resume'); } catch (_) {}
     const result = GGEngine.determineWinner(state);
     const overlay = document.getElementById('winnerOverlay');
     const headline = document.getElementById('winnerHeadline');
@@ -454,7 +449,19 @@
       return;
     }
     const hasLines = state.hLines.some(v => v > 0) || state.vLines.some(v => v > 0);
-    location.href = hasLines ? '../index.html' + buildStateHash() : '../index.html';
+    if (hasLines) {
+      try {
+        localStorage.setItem('gg_resume', JSON.stringify({
+          game: 'grid-grab',
+          state: GGEngine.serialize(state),
+          timestamp: Date.now(),
+          players: state.players
+        }));
+      } catch (_) {}
+    } else {
+      try { localStorage.removeItem('gg_resume'); } catch (_) {}
+    }
+    location.href = '../index.html';
   });
 
   // ─── Helpers ──────────────────────────────────────────
