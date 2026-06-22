@@ -1,0 +1,12 @@
+# Vercel
+.vercel
+
+# Local env
+.env
+.env*.local
+
+# OS / editor cruft
+.DS_Store
+
+.vercel
+.env*

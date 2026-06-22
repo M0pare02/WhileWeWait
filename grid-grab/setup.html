@@ -26,6 +26,23 @@
     <!-- Scrollable setup content -->
     <main class="gg-setup-content">
 
+      <!-- Mode -->
+      <section>
+        <p class="gg-section__label">How are you playing?</p>
+        <div class="gg-mode-toggle" role="radiogroup" aria-label="Play mode">
+          <button class="gg-mode-option gg-mode-option--active" data-mode="local"
+                  role="radio" aria-checked="true">
+            <span class="gg-mode-option__name">Pass &amp; play</span>
+            <span class="gg-mode-option__detail">One phone, shared</span>
+          </button>
+          <button class="gg-mode-option" data-mode="online"
+                  role="radio" aria-checked="false">
+            <span class="gg-mode-option__name">Each on own phone</span>
+            <span class="gg-mode-option__detail">Create a room</span>
+          </button>
+        </div>
+      </section>
+
       <!-- Grid Size -->
       <section>
         <p class="gg-section__label">Grid Size</p>
@@ -51,7 +68,7 @@
       <!-- Players -->
       <section>
         <div class="gg-section__header">
-          <p class="gg-section__label">Players</p>
+          <p class="gg-section__label" id="playersLabel">Players</p>
           <div class="gg-player-count-controls">
             <button class="gg-count-btn" id="removePlayer" aria-label="Remove player">−</button>
             <span class="gg-count-display" id="playerCountDisplay">2</span>
@@ -80,6 +97,7 @@
 
   </div>
 
+  <script src="js/net.js"></script>
   <script src="js/setup.js"></script>
 </body>
 </html>
