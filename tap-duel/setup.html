@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="dark">
+  <title>Tap Duel — Setup</title>
+  <link rel="stylesheet" href="../styles/main.css">
+  <link rel="stylesheet" href="styles/tap-duel.css">
+</head>
+<body>
+
+  <div class="phone-shell gg-shell" style="display:flex; flex-direction:column; height:100dvh;">
+
+    <!-- ═══ HEADER ═══════════════════════════════════════ -->
+    <header class="gg-header">
+      <button class="gg-back-btn" aria-label="Back" onclick="location.href='../index.html'">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <path d="M12.5 5L7.5 10L12.5 15" stroke="currentColor" stroke-width="1.8"
+                stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <h1 class="gg-header__title">Tap Duel</h1>
+      <div class="gg-header__spacer"></div>
+    </header>
+
+    <!-- ═══ SETUP CONTENT ════════════════════════════════ -->
+    <div class="gg-setup-content">
+
+      <!-- Rounds -->
+      <section class="section">
+        <p class="gg-section__label">Rounds</p>
+        <div class="td-round-picker">
+          <button class="td-round-btn" data-rounds="3">3</button>
+          <button class="td-round-btn td-round-btn--active" data-rounds="5">5</button>
+          <button class="td-round-btn" data-rounds="7">7</button>
+        </div>
+      </section>
+
+      <!-- Players -->
+      <section class="section">
+        <p class="gg-section__label">Players</p>
+        <div id="playerList"></div>
+        <button class="gg-add-player-btn" id="addPlayerBtn">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+          Add Player
+        </button>
+      </section>
+
+    </div>
+
+    <!-- ═══ FOOTER ════════════════════════════════════════ -->
+    <div class="gg-setup-footer">
+      <button class="gg-play-btn" id="playBtn">Let's Go</button>
+    </div>
+
+    <!-- ═══ COLOUR POPOVER ════════════════════════════════ -->
+    <div class="gg-color-popover" id="colorPopover" hidden>
+      <div class="gg-popover-grid" id="swatchGrid"></div>
+    </div>
+
+  </div>
+
+  <script src="js/setup.js"></script>
+</body>
+</html>

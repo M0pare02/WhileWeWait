@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="dark">
+  <title>In Progress — While We Wait</title>
+  <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+
+  <div class="phone-shell">
+
+    <!-- ═══ PAGE HEADER ══════════════════════════════════ -->
+    <header class="ip-page-header">
+      <h1 class="ip-page-header__title">In Progress</h1>
+      <p class="ip-page-header__subtitle">Your active games</p>
+    </header>
+
+    <!-- ═══ SCROLLABLE CONTENT ══════════════════════════ -->
+    <main class="content" id="ipContent"></main>
+
+    <!-- ═══ BOTTOM NAV ══════════════════════════════════ -->
+    <nav class="bottom-nav" aria-label="Main navigation">
+
+      <!-- Home -->
+      <div class="bottom-nav__tab" role="button" tabindex="0"
+           onclick="location.href='index.html'"
+           onkeydown="if(event.key==='Enter'||event.key===' '){location.href='index.html'}">
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 9.5L11 3L19 9.5V19C19 19.55 18.55 20 18 20H14V15H8V20H4C3.45 20 3 19.55 3 19V9.5Z"
+                stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+        </svg>
+        <span class="bottom-nav__label">Home</span>
+      </div>
+
+      <!-- Activities -->
+      <div class="bottom-nav__tab" role="button" tabindex="0">
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="3"  y="3"  width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.6"/>
+          <rect x="12" y="3"  width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.6"/>
+          <rect x="3"  y="12" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.6"/>
+          <rect x="12" y="12" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.6"/>
+        </svg>
+        <span class="bottom-nav__label">Activities</span>
+      </div>
+
+      <!-- In Progress (active) -->
+      <div class="bottom-nav__tab bottom-nav__tab--active" role="button" aria-current="page" tabindex="0">
+        <div class="bottom-nav__pill">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="4" y="2" width="14" height="2.5" rx="1.25" stroke="currentColor" stroke-width="1.5"/>
+            <rect x="4" y="17.5" width="14" height="2.5" rx="1.25" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M5 4.5L10.5 11L5 17.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M17 4.5L11.5 11L17 17.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span class="bottom-nav__label">In Progress</span>
+        </div>
+      </div>
+
+      <!-- Groups -->
+      <div class="bottom-nav__tab" role="button" tabindex="0">
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="8.5"  cy="7.5" r="3" stroke="currentColor" stroke-width="1.6"/>
+          <circle cx="15"   cy="8"   r="2.5" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M2 18C2 15.24 5 13 8.5 13C12 13 15 15.24 15 18"
+                stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+          <path d="M15 13C17.5 13 20 14.6 20 17"
+                stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <span class="bottom-nav__label">Groups</span>
+      </div>
+
+    </nav>
+  </div>
+
+<script>
+(function () {
+
+  var ICONS  = { 'grid-grab': 'img/activities/grid%20grab/icon.png', 'tap-duel': 'img/activities/tap%20duel/icon.png' };
+  var TITLES = { 'grid-grab': 'Grid Grab', 'tap-duel': 'Tap Duel' };
+  var URLS   = { 'grid-grab': 'grid-grab/game.html', 'tap-duel': 'tap-duel/game.html' };
+
+  // ─── Collect active sessions ─────────────────────────
+
+  var sessions = [];
+
+  // Grid Grab — local (with sessionStorage migration shim)
+  try {
+    var gg = JSON.parse(localStorage.getItem('gg_resume') || sessionStorage.getItem('gg_resume') || 'null');
+    if (gg) localStorage.setItem('gg_resume', JSON.stringify(gg));
+    if (gg && gg.game === 'grid-grab' && gg.state) {
+      sessions.push({ type: 'offline', game: 'grid-grab', resume: gg, ts: gg.timestamp || 0 });
+    }
+  } catch (_) {}
+
+  // Tap Duel — local
+  try {
+    var td = JSON.parse(localStorage.getItem('td_resume') || 'null');
+    if (td && td.game === 'tap-duel' && td.state) {
+      sessions.push({ type: 'offline', game: 'tap-duel', resume: td, ts: td.timestamp || 0 });
+    }
+  } catch (_) {}
+
+  // Grid Grab — online room
+  try {
+    var net = JSON.parse(sessionStorage.getItem('gg_net') || 'null');
+    if (net && net.code) {
+      sessions.push({ type: 'online', game: 'grid-grab', net: net, ts: Date.now() });
+    }
+  } catch (_) {}
+
+  // Most recently active first
+  sessions.sort(function (a, b) { return b.ts - a.ts; });
+
+  // ─── Build UI ─────────────────────────────────────────
+
+  var content = document.getElementById('ipContent');
+
+  if (sessions.length === 0) {
+    renderEmpty(content);
+  } else {
+    sessions.forEach(function (s) { renderGameCard(content, s); });
+  }
+
+  // ─── Empty state ──────────────────────────────────────
+
+  function renderEmpty(container) {
+    var section = document.createElement('section');
+    section.className = 'section ip-empty-state';
+    section.innerHTML =
+      '<div class="ip-empty-state__icon" aria-hidden="true">' +
+        '<svg width="28" height="28" viewBox="0 0 22 22" fill="none">' +
+          '<rect x="4" y="2" width="14" height="2.5" rx="1.25" stroke="#9B7BFF" stroke-width="1.5"/>' +
+          '<rect x="4" y="17.5" width="14" height="2.5" rx="1.25" stroke="#9B7BFF" stroke-width="1.5"/>' +
+          '<path d="M5 4.5L10.5 11L5 17.5" stroke="#9B7BFF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>' +
+          '<path d="M17 4.5L11.5 11L17 17.5" stroke="#9B7BFF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>' +
+        '</svg>' +
+      '</div>' +
+      '<p class="ip-empty-state__title">No games in progress</p>' +
+      '<p class="ip-empty-state__subtitle">Start a game to see it here.</p>';
+    container.appendChild(section);
+  }
+
+  // ─── Game card ────────────────────────────────────────
+
+  function renderGameCard(container, session) {
+    var section = document.createElement('section');
+    section.className = 'section';
+
+    var card = document.createElement('button');
+    card.className = 'card card--row card--accent ip-game-card';
+
+    var iconDiv = document.createElement('div');
+    iconDiv.className = 'card__icon card__icon--img';
+    iconDiv.setAttribute('aria-hidden', 'true');
+    iconDiv.innerHTML = '<img src="' + (ICONS[session.game] || '') + '" alt="">';
+
+    var bodyDiv = document.createElement('div');
+    bodyDiv.className = 'card__body';
+
+    var titleEl = document.createElement('h2');
+    titleEl.className = 'card__title';
+    titleEl.textContent = TITLES[session.game] || session.game;
+
+    var metaEl = document.createElement('div');
+    metaEl.className = 'ip-card-meta';
+
+    if (session.type === 'offline') {
+      var players = session.resume.players || [];
+      var playersEl = document.createElement('div');
+      playersEl.className = 'continue-players';
+      players.forEach(function (p) {
+        var span = document.createElement('span');
+        span.className = 'continue-player';
+        var dot = document.createElement('span');
+        dot.className = 'continue-player__dot';
+        dot.style.background = p.color;
+        span.appendChild(dot);
+        span.appendChild(document.createTextNode(p.name));
+        playersEl.appendChild(span);
+      });
+      metaEl.appendChild(playersEl);
+
+      var badge = document.createElement('span');
+      badge.className = 'ip-badge';
+      if (session.game === 'tap-duel') {
+        var cur = session.resume.state.currentRound || 1;
+        var tot = session.resume.state.totalRounds || (session.resume.config && session.resume.config.rounds) || '?';
+        badge.textContent = 'Round ' + cur + ' / ' + tot;
+      } else {
+        badge.textContent = 'Pass & Play';
+      }
+      metaEl.appendChild(badge);
+    } else {
+      var badge = document.createElement('span');
+      badge.className = 'ip-badge ip-badge--online';
+      badge.textContent = 'Online · ' + session.net.code;
+      metaEl.appendChild(badge);
+    }
+
+    bodyDiv.appendChild(titleEl);
+    bodyDiv.appendChild(metaEl);
+
+    var chevronDiv = document.createElement('div');
+    chevronDiv.className = 'card__chevron';
+    chevronDiv.setAttribute('aria-hidden', 'true');
+    chevronDiv.innerHTML =
+      '<svg width="20" height="20" viewBox="0 0 20 20" fill="none">' +
+        '<path d="M7.5 5L12.5 10L7.5 15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>' +
+      '</svg>';
+
+    card.appendChild(iconDiv);
+    card.appendChild(bodyDiv);
+    card.appendChild(chevronDiv);
+
+    var dest = URLS[session.game] || 'index.html';
+    card.addEventListener('click', function () { location.href = dest; });
+
+    section.appendChild(card);
+    container.appendChild(section);
+  }
+
+})();
+</script>
+</body>
+</html>

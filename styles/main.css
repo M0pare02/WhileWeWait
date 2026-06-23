@@ -303,14 +303,26 @@ body {
 
 .game-card--active {
   cursor: pointer;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
-.game-card--active:hover {
+.game-card--active:hover,
+.game-card--active:active {
+  transform: translateY(-3px);
   border-color: rgba(107, 78, 255, 0.7);
   box-shadow:
     0 0 0 1px rgba(107, 78, 255, 0.4),
     0 0 18px rgba(107, 78, 255, 0.45),
-    0 0 40px rgba(107, 78, 255, 0.2);
+    0 6px 24px rgba(0, 0, 0, 0.3);
+}
+
+.game-card--active .game-card__image {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.game-card--active:hover .game-card__image,
+.game-card--active:active .game-card__image {
+  transform: scale(1.08) translateY(-4px);
 }
 
 .game-card--soon {
@@ -324,6 +336,22 @@ body {
   height: 72px;
   background: #2E2460;
   flex-shrink: 0;
+  background-size: cover;
+  background-position: center top;
+}
+
+.card__icon--img {
+  overflow: hidden;
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+.card__icon--img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 .game-card__body {
@@ -385,6 +413,18 @@ body {
   width: 100%;
   cursor: pointer;
   font-family: inherit;
+  text-align: left;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.continue-card:hover,
+.continue-card:active {
+  transform: translateY(-3px);
+  border-color: rgba(107, 78, 255, 0.7);
+  box-shadow:
+    0 0 0 1px rgba(107, 78, 255, 0.4),
+    0 0 18px rgba(107, 78, 255, 0.45),
+    0 6px 24px rgba(0, 0, 0, 0.3);
 }
 
 .continue-players {
@@ -451,4 +491,163 @@ body {
   font-size: 0.62rem;
   font-weight: 500;
   letter-spacing: 0.01em;
+}
+
+/* ─── Nav Dim State (no active games) ────────────────── */
+
+.bottom-nav__tab--dim {
+  opacity: 0.45;
+}
+
+/* ─── Nav Tab Hover / Hold Effect ────────────────────── */
+
+.bottom-nav__tab > svg,
+.bottom-nav__pill > svg {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.bottom-nav__tab > .bottom-nav__label {
+  transition: color 0.15s ease, transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.bottom-nav__tab:hover > svg,
+.bottom-nav__tab:active > svg,
+.bottom-nav__tab:hover .bottom-nav__pill > svg,
+.bottom-nav__tab:active .bottom-nav__pill > svg {
+  transform: scale(1.18);
+}
+
+.bottom-nav__tab:hover > .bottom-nav__label,
+.bottom-nav__tab:active > .bottom-nav__label {
+  color: var(--text-white);
+  transform: translateY(-1px);
+}
+
+/* ─── In Progress Page Header ────────────────────────── */
+
+.ip-page-header {
+  padding: 52px 24px 20px;
+  flex-shrink: 0;
+}
+
+.ip-page-header__title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--text-white);
+  line-height: 1.1;
+  margin-bottom: 4px;
+}
+
+.ip-page-header__subtitle {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+/* ─── In Progress Empty State ────────────────────────── */
+
+.ip-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 48px 24px;
+  gap: 12px;
+}
+
+.ip-empty-state__icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 18px;
+  background: rgba(107, 78, 255, 0.12);
+  border: 1px solid rgba(107, 78, 255, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 4px;
+}
+
+.ip-empty-state__title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-white);
+}
+
+.ip-empty-state__subtitle {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+/* ─── In Progress Game Card ──────────────────────────── */
+
+.ip-game-card {
+  width: 100%;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.ip-game-card:hover,
+.ip-game-card:active {
+  transform: translateY(-3px);
+  border-color: rgba(107, 78, 255, 0.7);
+  box-shadow:
+    0 0 0 1px rgba(107, 78, 255, 0.4),
+    0 0 18px rgba(107, 78, 255, 0.45),
+    0 6px 24px rgba(0, 0, 0, 0.3);
+}
+
+.continue-card .card__icon--img img,
+.ip-game-card .card__icon--img img {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.continue-card:hover .card__icon--img img,
+.continue-card:active .card__icon--img img,
+.ip-game-card:hover .card__icon--img img,
+.ip-game-card:active .card__icon--img img {
+  transform: scale(1.08) translateY(-3px);
+}
+
+.continue-card .card__chevron,
+.ip-game-card .card__chevron {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.continue-card:hover .card__chevron,
+.continue-card:active .card__chevron,
+.ip-game-card:hover .card__chevron,
+.ip-game-card:active .card__chevron {
+  transform: translateX(3px);
+}
+
+.ip-card-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-top: 4px;
+}
+
+/* ─── In Progress Badges ─────────────────────────────── */
+
+.ip-badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 2px 8px;
+  width: fit-content;
+}
+
+.ip-badge--online {
+  color: var(--accent-glow);
+  background: rgba(107, 78, 255, 0.12);
+  border-color: rgba(107, 78, 255, 0.3);
 }
