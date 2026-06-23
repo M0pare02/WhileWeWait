@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="dark">
+  <title>Tap Duel</title>
+  <link rel="stylesheet" href="../styles/main.css">
+  <link rel="stylesheet" href="styles/tap-duel.css">
+</head>
+<body>
+
+  <div class="phone-shell gg-shell" style="display:flex; flex-direction:column; height:100dvh; overflow:hidden;">
+
+    <!-- ═══ HEADER ═══════════════════════════════════════ -->
+    <header class="gg-header">
+      <button class="gg-back-btn" id="quitBtn" aria-label="Quit game">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <path d="M12.5 5L7.5 10L12.5 15" stroke="currentColor" stroke-width="1.8"
+                stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <h1 class="gg-header__title">Tap Duel</h1>
+      <div class="gg-header__spacer"></div>
+    </header>
+
+    <!-- ═══ ARENA (built by game.js) ════════════════════ -->
+    <div class="td-arena" id="tdArena"></div>
+
+    <!-- ═══ OVERLAY (round result + game over) ══════════ -->
+    <div class="td-overlay" id="tdOverlay" hidden>
+      <div class="td-overlay-card" id="tdOverlayContent"></div>
+    </div>
+
+  </div>
+
+  <script src="js/engine.js"></script>
+  <script src="js/game.js"></script>
+</body>
+</html>

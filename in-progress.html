@@ -77,24 +77,41 @@
 <script>
 (function () {
 
+  var ICONS  = { 'grid-grab': 'img/activities/grid%20grab/icon.png', 'tap-duel': 'img/activities/tap%20duel/icon.png' };
+  var TITLES = { 'grid-grab': 'Grid Grab', 'tap-duel': 'Tap Duel' };
+  var URLS   = { 'grid-grab': 'grid-grab/game.html', 'tap-duel': 'tap-duel/game.html' };
+
   // ─── Collect active sessions ─────────────────────────
 
   var sessions = [];
 
-  var resume = null;
+  // Grid Grab — local (with sessionStorage migration shim)
   try {
-    resume = JSON.parse(localStorage.getItem('gg_resume') || sessionStorage.getItem('gg_resume') || 'null');
-    if (resume) localStorage.setItem('gg_resume', JSON.stringify(resume));
+    var gg = JSON.parse(localStorage.getItem('gg_resume') || sessionStorage.getItem('gg_resume') || 'null');
+    if (gg) localStorage.setItem('gg_resume', JSON.stringify(gg));
+    if (gg && gg.game === 'grid-grab' && gg.state) {
+      sessions.push({ type: 'offline', game: 'grid-grab', resume: gg, ts: gg.timestamp || 0 });
+    }
   } catch (_) {}
-  if (resume && resume.game === 'grid-grab' && resume.state) {
-    sessions.push({ type: 'offline', game: 'grid-grab', resume: resume });
-  }
 
-  var net = null;
-  try { net = JSON.parse(sessionStorage.getItem('gg_net') || 'null'); } catch (_) {}
-  if (net && net.code) {
-    sessions.push({ type: 'online', game: 'grid-grab', net: net });
-  }
+  // Tap Duel — local
+  try {
+    var td = JSON.parse(localStorage.getItem('td_resume') || 'null');
+    if (td && td.game === 'tap-duel' && td.state) {
+      sessions.push({ type: 'offline', game: 'tap-duel', resume: td, ts: td.timestamp || 0 });
+    }
+  } catch (_) {}
+
+  // Grid Grab — online room
+  try {
+    var net = JSON.parse(sessionStorage.getItem('gg_net') || 'null');
+    if (net && net.code) {
+      sessions.push({ type: 'online', game: 'grid-grab', net: net, ts: Date.now() });
+    }
+  } catch (_) {}
+
+  // Most recently active first
+  sessions.sort(function (a, b) { return b.ts - a.ts; });
 
   // ─── Build UI ─────────────────────────────────────────
 
@@ -103,7 +120,7 @@
   if (sessions.length === 0) {
     renderEmpty(content);
   } else {
-    sessions.forEach(function (session) { renderGameCard(content, session); });
+    sessions.forEach(function (s) { renderGameCard(content, s); });
   }
 
   // ─── Empty state ──────────────────────────────────────
@@ -137,14 +154,14 @@
     var iconDiv = document.createElement('div');
     iconDiv.className = 'card__icon card__icon--img';
     iconDiv.setAttribute('aria-hidden', 'true');
-    iconDiv.innerHTML = '<img src="img/activities/grid%20grab/icon.png" alt="">';
+    iconDiv.innerHTML = '<img src="' + (ICONS[session.game] || '') + '" alt="">';
 
     var bodyDiv = document.createElement('div');
     bodyDiv.className = 'card__body';
 
     var titleEl = document.createElement('h2');
     titleEl.className = 'card__title';
-    titleEl.textContent = 'Grid Grab';
+    titleEl.textContent = TITLES[session.game] || session.game;
 
     var metaEl = document.createElement('div');
     metaEl.className = 'ip-card-meta';
@@ -167,7 +184,13 @@
 
       var badge = document.createElement('span');
       badge.className = 'ip-badge';
-      badge.textContent = 'Pass & Play';
+      if (session.game === 'tap-duel') {
+        var cur = session.resume.state.currentRound || 1;
+        var tot = session.resume.state.totalRounds || (session.resume.config && session.resume.config.rounds) || '?';
+        badge.textContent = 'Round ' + cur + ' / ' + tot;
+      } else {
+        badge.textContent = 'Pass & Play';
+      }
       metaEl.appendChild(badge);
     } else {
       var badge = document.createElement('span');
@@ -191,9 +214,8 @@
     card.appendChild(bodyDiv);
     card.appendChild(chevronDiv);
 
-    card.addEventListener('click', function () {
-      location.href = 'grid-grab/game.html';
-    });
+    var dest = URLS[session.game] || 'index.html';
+    card.addEventListener('click', function () { location.href = dest; });
 
     section.appendChild(card);
     container.appendChild(section);
