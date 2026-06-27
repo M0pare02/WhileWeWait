@@ -59,4 +59,8 @@ async function casRoom(code, expectedVersion, room) {
   return Number(r);
 }
 
-module.exports = { command, getRoom, createRoom, casRoom, TTL };
+async function deleteRoom(code) {
+  return command(['DEL', 'room:' + code]);
+}
+
+module.exports = { command, getRoom, createRoom, casRoom, deleteRoom, TTL };

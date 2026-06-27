@@ -45,5 +45,15 @@ const GGNet = (() => {
   const pollRoom = (code, version) =>
     api(`/room/${code}` + (version != null ? `?v=${version}` : ''));
 
-  return { get, set, clear, createRoom, joinRoom, startGame, sendMove, pollRoom };
+  const closeRoom = (code, token) =>
+    api(`/room/${code}/close`, { method: 'POST', body: { token } });
+
+  function beaconCloseRoom(code, token) {
+    navigator.sendBeacon(
+      '/api/room/' + code + '/close',
+      new Blob([JSON.stringify({ token })], { type: 'application/json' })
+    );
+  }
+
+  return { get, set, clear, createRoom, joinRoom, startGame, sendMove, pollRoom, closeRoom, beaconCloseRoom };
 })();

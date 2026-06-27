@@ -239,8 +239,18 @@
   }
 
   // ─── Boot ──────────────────────────────────────────
-  document.getElementById('backBtn').addEventListener('click', () => {
+  document.getElementById('backBtn').addEventListener('click', async () => {
+    const net = WZNet.get();
+    if (net && net.host) {
+      stopPolling();
+      try { await WZNet.closeRoom(net.code, net.token); } catch (_) {}
+    }
     location.href = '../index.html';
+  });
+
+  window.addEventListener('beforeunload', () => {
+    const net = WZNet.get();
+    if (net && net.host) WZNet.beaconCloseRoom(net.code, net.token);
   });
 
   document.addEventListener('visibilitychange', () => {

@@ -50,5 +50,15 @@ const WZNet = (() => {
   const pollRoom = (code, version) =>
     api(`/wz/${code}` + (version != null ? `?v=${version}` : ''));
 
-  return { get, set, clear, createRoom, joinRoom, startGame, writeState, submit, pollRoom };
+  const closeRoom = (code, token) =>
+    api(`/wz/${code}/close`, { method: 'POST', body: { token } });
+
+  function beaconCloseRoom(code, token) {
+    navigator.sendBeacon(
+      '/api/wz/' + code + '/close',
+      new Blob([JSON.stringify({ token })], { type: 'application/json' })
+    );
+  }
+
+  return { get, set, clear, createRoom, joinRoom, startGame, writeState, submit, pollRoom, closeRoom, beaconCloseRoom };
 })();
