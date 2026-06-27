@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="dark">
+  <title>WordZ — Setup</title>
+  <link rel="stylesheet" href="../styles/main.css">
+  <link rel="stylesheet" href="styles/wordz.css">
+</head>
+<body>
+
+  <div class="phone-shell gg-shell" style="display:flex; flex-direction:column; height:100dvh;">
+
+    <!-- ═══ HEADER ═══════════════════════════════════════ -->
+    <header class="gg-header">
+      <button class="gg-back-btn" aria-label="Back" onclick="location.href='../index.html'">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <path d="M12.5 5L7.5 10L12.5 15" stroke="currentColor" stroke-width="1.8"
+                stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <h1 class="gg-header__title">WordZ</h1>
+      <div class="gg-header__spacer"></div>
+    </header>
+
+    <!-- ═══ SETUP CONTENT ════════════════════════════════ -->
+    <div class="gg-setup-content">
+
+      <!-- Variant -->
+      <section>
+        <p class="gg-section__label">Game mode</p>
+        <div class="gg-mode-toggle" role="radiogroup" aria-label="Game mode">
+          <button class="gg-mode-option gg-mode-option--active" data-variant="1v1"
+                  role="radio" aria-checked="true">
+            <span class="gg-mode-option__name">1 v 1</span>
+            <span class="gg-mode-option__detail">You pick the letters</span>
+          </button>
+          <button class="gg-mode-option" data-variant="multi" role="radio" aria-checked="false">
+            <span class="gg-mode-option__name">Multiplayer</span>
+            <span class="gg-mode-option__detail">Random letters · 2–8</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- Rounds -->
+      <section>
+        <p class="gg-section__label">Rounds</p>
+        <div class="td-round-picker" role="radiogroup" aria-label="Number of rounds">
+          <button class="td-round-btn" data-rounds="3" role="radio" aria-checked="false">3</button>
+          <button class="td-round-btn td-round-btn--active" data-rounds="5" role="radio" aria-checked="true">5</button>
+          <button class="td-round-btn" data-rounds="10" role="radio" aria-checked="false">10</button>
+          <button class="td-round-btn" data-rounds="0" role="radio" aria-checked="false">∞</button>
+        </div>
+      </section>
+
+      <!-- Host (you) -->
+      <section>
+        <p class="gg-section__label" id="hostLabel">You (host)</p>
+        <div class="gg-player-list" id="hostRow"></div>
+        <p class="wz-hint" id="joinersHint">Friends join from their own phones in the next screen.</p>
+      </section>
+
+    </div>
+
+    <!-- ═══ FOOTER ════════════════════════════════════════ -->
+    <div class="gg-setup-footer">
+      <button class="gg-play-btn" id="createBtn">Create Room</button>
+      <button class="wz-link-btn" id="joinBtn">Join a room with a code</button>
+    </div>
+
+    <!-- ═══ COLOUR POPOVER ════════════════════════════════ -->
+    <div class="gg-color-popover" id="colorPopover" hidden aria-label="Choose color">
+      <button class="gg-color-option" data-color="#FF6B6B" style="background:#FF6B6B" aria-label="Coral"></button>
+      <button class="gg-color-option" data-color="#45B7D1" style="background:#45B7D1" aria-label="Sky"></button>
+      <button class="gg-color-option" data-color="#FFC947" style="background:#FFC947" aria-label="Amber"></button>
+      <button class="gg-color-option" data-color="#4ECDC4" style="background:#4ECDC4" aria-label="Mint"></button>
+      <button class="gg-color-option" data-color="#FF6B9D" style="background:#FF6B9D" aria-label="Pink"></button>
+      <button class="gg-color-option" data-color="#98D856" style="background:#98D856" aria-label="Lime"></button>
+    </div>
+
+  </div>
+
+  <script src="js/net.js"></script>
+  <script src="js/setup.js"></script>
+</body>
+</html>

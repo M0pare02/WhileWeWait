@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="dark">
+  <title>WordZ — Lobby</title>
+  <link rel="stylesheet" href="../styles/main.css">
+  <link rel="stylesheet" href="styles/wordz.css">
+</head>
+<body>
+
+  <div class="phone-shell gg-shell" style="display:flex; flex-direction:column; height:100dvh;">
+
+    <!-- Header -->
+    <header class="gg-header">
+      <button class="gg-back-btn" id="backBtn" aria-label="Back to home">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12.5 15L7.5 10L12.5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <h1 class="gg-header__title">WordZ</h1>
+      <div class="gg-header__spacer"></div>
+    </header>
+
+    <main class="gg-lobby-content">
+
+      <!-- Enter a code (joining without a link) -->
+      <section class="gg-lobby-panel" id="codePanel" hidden>
+        <p class="gg-section__label">Enter room code</p>
+        <input class="gg-text-input gg-code-input" id="codeInput" type="text"
+               inputmode="latin" autocapitalize="characters" maxlength="4"
+               placeholder="ABCD" aria-label="Room code">
+        <p class="gg-lobby-hint" id="codeError" hidden></p>
+      </section>
+
+      <!-- Pick name + color before joining -->
+      <section class="gg-lobby-panel" id="joinPanel" hidden>
+        <p class="gg-section__label">Joining room <span id="joinCode"></span></p>
+        <input class="gg-text-input" id="nameInput" type="text" maxlength="16"
+               placeholder="Your name" aria-label="Your name">
+        <p class="gg-section__label" style="margin-top:6px;">Pick your color</p>
+        <div class="gg-color-row" id="colorRow"></div>
+        <p class="gg-lobby-hint" id="joinError" hidden></p>
+      </section>
+
+      <!-- Roster / waiting room -->
+      <section class="gg-lobby-panel" id="rosterPanel" hidden>
+        <p class="gg-section__label">Room code — share it with the table</p>
+        <div class="gg-room-code" id="roomCode">····</div>
+        <p class="gg-section__label" style="margin-top:6px;">Players</p>
+        <div class="gg-seat-list" id="seatList"></div>
+        <p class="gg-lobby-hint" id="rosterHint">Waiting for players to join…</p>
+      </section>
+
+    </main>
+
+    <!-- Footer action button -->
+    <div class="gg-setup-footer">
+      <button class="gg-play-btn" id="actionBtn" hidden>Continue</button>
+    </div>
+
+  </div>
+
+  <script src="js/net.js"></script>
+  <script src="js/lobby.js"></script>
+</body>
+</html>
