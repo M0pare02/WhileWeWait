@@ -14,6 +14,7 @@
   let currentRender = null;       // renderJoin | renderRoster
   let pollTimer = null;
   let lastVersion = -1;
+  let leavingForGame = false;     // true when navigating to game.html — suppresses beacon
 
   // ─── View plumbing ─────────────────────────────────
   function showPanel(id) {
@@ -231,6 +232,7 @@
     try {
       await WZNet.startGame(code, net.token);
       stopPolling();
+      leavingForGame = true;
       location.href = 'game.html';
     } catch (e) {
       setAction('Start Game', doStart, true);
@@ -249,6 +251,7 @@
   });
 
   window.addEventListener('beforeunload', () => {
+    if (leavingForGame) return;
     const net = WZNet.get();
     if (net && net.host) WZNet.beaconCloseRoom(net.code, net.token);
   });

@@ -11,6 +11,7 @@
   let currentRender = null;       // renderJoin | renderRoster
   let pollTimer = null;
   let lastVersion = -1;
+  let leavingForGame = false;     // true when navigating to game.html — suppresses beacon
 
   // ─── View plumbing ─────────────────────────────────
 
@@ -223,6 +224,7 @@
     try {
       await GGNet.startGame(code, net.token);
       stopPolling();
+      leavingForGame = true;
       location.href = 'game.html';
     } catch (e) {
       setAction('Start Game', doStart, true);
@@ -242,6 +244,7 @@
   });
 
   window.addEventListener('beforeunload', () => {
+    if (leavingForGame) return;
     const net = GGNet.get();
     if (net && net.host) GGNet.beaconCloseRoom(net.code, net.token);
   });
