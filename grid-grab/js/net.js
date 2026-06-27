@@ -46,11 +46,11 @@ const GGNet = (() => {
     api(`/room/${code}` + (version != null ? `?v=${version}` : ''));
 
   const closeRoom = (code, token) =>
-    api(`/room/${code}/close`, { method: 'POST', body: { token } });
+    api(`/room/${code}`, { method: 'POST', body: { token } });
 
   function beaconCloseRoom(code, token) {
     navigator.sendBeacon(
-      '/api/room/' + code + '/close',
+      '/api/room/' + code,
       new Blob([JSON.stringify({ token })], { type: 'application/json' })
     );
   }

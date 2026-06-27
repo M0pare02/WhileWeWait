@@ -51,11 +51,11 @@ const WZNet = (() => {
     api(`/wz/${code}` + (version != null ? `?v=${version}` : ''));
 
   const closeRoom = (code, token) =>
-    api(`/wz/${code}/close`, { method: 'POST', body: { token } });
+    api(`/wz/${code}`, { method: 'POST', body: { token } });
 
   function beaconCloseRoom(code, token) {
     navigator.sendBeacon(
-      '/api/wz/' + code + '/close',
+      '/api/wz/' + code,
       new Blob([JSON.stringify({ token })], { type: 'application/json' })
     );
   }
