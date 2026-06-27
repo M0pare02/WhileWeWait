@@ -267,10 +267,11 @@
     const joinParam = params.has('join');
     const net       = WZNet.get();
 
+    if (joinParam && !roomParam) { enterCodeEntry(); return; }
+
     code = roomParam || (net && net.code) || '';
 
-    if (!code && joinParam) { enterCodeEntry(); return; }
-    if (!code)              { location.href = 'setup.html'; return; }
+    if (!code) { location.href = 'setup.html'; return; }
 
     if (net && net.code === code) enterRoster();  // already a member (host or player)
     else                          enterJoin();    // have a code, not joined yet
