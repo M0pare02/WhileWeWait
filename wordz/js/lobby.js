@@ -1,9 +1,12 @@
-// Grid Grab lobby — shared by the host and joining players.
-// Three views (code entry → join → roster), driven by URL params + gg_net.
+// WordZ lobby — shared by the host and joining players.
+// Three views (code entry → join → roster), driven by URL params + wz_net.
+// Unlike Grid Grab the seat list grows dynamically; the host can start once at
+// least two players are in (1v1 needs exactly its two seats filled).
 
 (function () {
 
-  const PALETTE = ['#FF6B6B', '#45B7D1', '#FFC947', '#A855F7', '#FF6B9D', '#98D856'];
+  const PALETTE = ['#FF6B6B', '#45B7D1', '#FFC947', '#4ECDC4', '#FF6B9D', '#98D856'];
+  const MIN_PLAYERS = 2;
 
   let code = '';
   let view = '';
@@ -14,7 +17,6 @@
   let leavingForGame = false;     // true when navigating to game.html — suppresses beacon
 
   // ─── View plumbing ─────────────────────────────────
-
   function showPanel(id) {
     ['codePanel', 'joinPanel', 'rosterPanel'].forEach(p => {
       document.getElementById(p).hidden = (p !== id);
@@ -42,13 +44,12 @@
   }
 
   // ─── Polling ───────────────────────────────────────
-
   function startPolling() {
     stopPolling();
-    lastVersion = -1; // force a full fetch + render on the next tick
+    lastVersion = -1;
     const tick = async () => {
       try {
-        const data = await GGNet.pollRoom(code, lastVersion >= 0 ? lastVersion : undefined);
+        const data = await WZNet.pollRoom(code, lastVersion >= 0 ? lastVersion : undefined);
         if (data && data.changed !== false && data.room) {
           lastVersion = data.room.version;
           if (currentRender) currentRender(data.room);
@@ -60,7 +61,6 @@
           location.href = '../index.html';
           return;
         }
-        // transient network error — keep polling
       }
       pollTimer = setTimeout(tick, 1500);
     };
@@ -72,7 +72,6 @@
   }
 
   // ─── Code-entry view ───────────────────────────────
-
   function enterCodeEntry() {
     view = 'code';
     currentRender = null;
@@ -94,7 +93,6 @@
   }
 
   // ─── Join view ─────────────────────────────────────
-
   function renderColors(taken) {
     const row = document.getElementById('colorRow');
     row.innerHTML = '';
@@ -125,14 +123,14 @@
   function renderJoin(room) {
     document.getElementById('joinCode').textContent = room.code;
 
-    const taken = room.seats.filter(s => s.filled).map(s => s.color);
+    const taken = room.seats.map(s => s.color);
     if (taken.includes(selectedColor)) {
       const free = PALETTE.find(c => !taken.includes(c));
       if (free) selectedColor = free;
     }
     renderColors(taken);
 
-    const full    = room.seats.every(s => s.filled);
+    const full    = room.seats.length >= room.maxSeats;
     const started = room.status !== 'lobby';
 
     if (started) {
@@ -151,8 +149,8 @@
     const name = (document.getElementById('nameInput').value || '').trim() || 'Player';
     setAction('Joining…', null, false);
     try {
-      const data = await GGNet.joinRoom(code, name, selectedColor);
-      GGNet.set({ code, token: data.token, seat: data.seat, host: false });
+      const data = await WZNet.joinRoom(code, name, selectedColor);
+      WZNet.set({ code, token: data.token, seat: data.seat, host: false });
       enterRoster();
     } catch (e) {
       const msg = e.data && e.data.error;
@@ -165,7 +163,6 @@
   }
 
   // ─── Roster view ───────────────────────────────────
-
   function enterRoster() {
     view = 'roster';
     currentRender = renderRoster;
@@ -179,24 +176,25 @@
 
     const list = document.getElementById('seatList');
     list.innerHTML = '';
-    let filled = 0;
     room.seats.forEach((s, i) => {
       const seat = document.createElement('div');
-      if (s.filled) {
-        filled++;
-        seat.className = 'gg-seat';
-        seat.innerHTML = `
-          <span class="gg-seat__dot" style="background:${s.color}"></span>
-          <span class="gg-seat__name">${escapeHtml(s.name)}</span>
-          ${i === 0 ? '<span class="gg-seat__badge">Host</span>' : ''}`;
-      } else {
-        seat.className = 'gg-seat gg-seat--empty';
-        seat.innerHTML = `
-          <span class="gg-seat__dot"></span>
-          <span class="gg-seat__name">Waiting…</span>`;
-      }
+      seat.className = 'gg-seat';
+      seat.innerHTML = `
+        <span class="gg-seat__dot" style="background:${s.color}"></span>
+        <span class="gg-seat__name">${escapeHtml(s.name)}</span>
+        ${i === 0 ? '<span class="gg-seat__badge">Host</span>' : ''}`;
       list.appendChild(seat);
     });
+
+    // For 1v1 show the empty opponent slot so it's clear someone needs to join.
+    if (room.config.variant === '1v1' && room.seats.length < room.maxSeats) {
+      const seat = document.createElement('div');
+      seat.className = 'gg-seat gg-seat--empty';
+      seat.innerHTML = `
+        <span class="gg-seat__dot"></span>
+        <span class="gg-seat__name">Waiting…</span>`;
+      list.appendChild(seat);
+    }
 
     if (room.status === 'playing') {
       stopPolling();
@@ -204,14 +202,24 @@
       return;
     }
 
-    const net = GGNet.get();
+    const net = WZNet.get();
     const isHost = net && net.host;
-    const allFilled = filled === room.seatCount;
+    const count = room.seats.length;
+    const is1v1 = room.config.variant === '1v1';
+    const canStart = is1v1 ? count === 2 : count >= MIN_PLAYERS;
 
     if (isHost) {
-      setAction('Start Game', doStart, allFilled);
-      document.getElementById('rosterHint').textContent =
-        allFilled ? 'Everyone’s in — tap Start!' : `Waiting for ${room.seatCount - filled} more…`;
+      setAction('Start Game', doStart, canStart);
+      const hint = document.getElementById('rosterHint');
+      if (canStart) {
+        hint.textContent = is1v1
+          ? 'Both players in — tap Start!'
+          : `${count} players in — tap Start, or wait for more (up to ${room.maxSeats}).`;
+      } else {
+        hint.textContent = is1v1
+          ? 'Waiting for your opponent to join…'
+          : `Need at least ${MIN_PLAYERS} players — ${MIN_PLAYERS - count} more to go…`;
+      }
     } else {
       setAction(null);
       document.getElementById('rosterHint').textContent = 'Waiting for the host to start…';
@@ -219,10 +227,10 @@
   }
 
   async function doStart() {
-    const net = GGNet.get();
+    const net = WZNet.get();
     setAction('Starting…', null, false);
     try {
-      await GGNet.startGame(code, net.token);
+      await WZNet.startGame(code, net.token);
       stopPolling();
       leavingForGame = true;
       location.href = 'game.html';
@@ -233,20 +241,19 @@
   }
 
   // ─── Boot ──────────────────────────────────────────
-
   document.getElementById('backBtn').addEventListener('click', async () => {
-    const net = GGNet.get();
+    const net = WZNet.get();
     if (net && net.host) {
       stopPolling();
-      try { await GGNet.closeRoom(net.code, net.token); } catch (_) {}
+      try { await WZNet.closeRoom(net.code, net.token); } catch (_) {}
     }
     location.href = '../index.html';
   });
 
   window.addEventListener('beforeunload', () => {
     if (leavingForGame) return;
-    const net = GGNet.get();
-    if (net && net.host) GGNet.beaconCloseRoom(net.code, net.token);
+    const net = WZNet.get();
+    if (net && net.host) WZNet.beaconCloseRoom(net.code, net.token);
   });
 
   document.addEventListener('visibilitychange', () => {
@@ -258,7 +265,7 @@
     const params    = new URLSearchParams(location.search);
     const roomParam = (params.get('room') || '').toUpperCase();
     const joinParam = params.has('join');
-    const net       = GGNet.get();
+    const net       = WZNet.get();
 
     if (joinParam && !roomParam) { enterCodeEntry(); return; }
 

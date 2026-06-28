@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    { "source": "/api/wz/:code/:sub",  "destination": "/api/wz?code=:code&sub=:sub" },
+    { "source": "/api/wz/:code",       "destination": "/api/wz?code=:code" },
+    { "source": "/api/room/:code/:sub","destination": "/api/room?code=:code&sub=:sub" },
+    { "source": "/api/room/:code",     "destination": "/api/room?code=:code" }
+  ]
+}
